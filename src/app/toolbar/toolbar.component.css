@@ -1,0 +1,82 @@
+.container {
+  width: 250px;
+}
+
+.field-container {
+  padding-top: 10px;
+  padding-left: 15px;
+}
+
+.field-group {
+  margin-bottom: 20px;
+}
+
+.file-select {
+  border: 1px solid #ccc;
+  display: inline-block;
+  padding: 6px 12px;
+  cursor: pointer;
+  border-radius: 7px;
+}
+
+input[type="file"] {
+  display: none;
+}
+
+.subtitle {
+  font-weight: 700;
+  color: #888;
+  margin-top: 5px;
+  width: 75px;
+  overflow: hidden;
+  white-space: nowrap
+}
+
+.after-field {
+  margin-left: 20px;
+}
+
+.reset-button {
+  color: rgb(255, 100, 100);
+  border: 2px solid rgb(255, 100, 100);
+  border-radius: 100%;
+  width: 19px;
+  height: 19px;
+  position: relative;
+  top: -12px;
+  left: 8px;
+  background-color: #222;
+  cursor: pointer;
+}
+
+#gradient-reset {
+  top: -12px;
+  left: -9px;
+}
+
+#background-reset {
+  top: -12px;
+  left: 8px;
+}
+
+
+.reset-label {
+  font-size: 17px;
+  font-weight: bold;
+  transform: translate(0.6px, 0.5px);
+}
+
+.file-selects-container {
+  display: inline-flex;
+}
+
+.divider {
+  height: 0.5px;
+  border-radius: 100px;
+}
+
+.field-divider {
+  width: 100%;
+  margin: 0 10px 8px 10px;
+  background-color: rgb(76, 76, 76);
+}

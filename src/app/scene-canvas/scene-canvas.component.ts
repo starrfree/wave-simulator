@@ -10,10 +10,10 @@ export class SceneCanvasComponent implements OnInit {
   @ViewChild('glCanvas') public canvas!: ElementRef
 
   @Input() parameters: any = {};
-
+  canvasWidthOffset = '270px'
   textureOffset = 0
   step = 0
-
+  reset = false
   didInit: boolean = false
   buffers: any
   textures: any
@@ -36,8 +36,20 @@ export class SceneCanvasComponent implements OnInit {
     this.didInit = true
   }
 
+  public initialize = () => {
+    if (this.shaderService.didInit) {
+      this.reset = true
+    }
+  }
+
+  public toggleFullScreen = (state: boolean) => {
+    this.canvasWidthOffset = state ? '0px' : '270px'
+    setTimeout(() => this.initialize(), 310)
+  }
+
   main(): void {
     const gl = this.canvas.nativeElement.getContext("webgl2")
+    this.shaderService.gl = gl
     gl.getExtension("EXT_color_buffer_float")
     if (gl === null) {
       console.error("Unable to initialize WebGL")
@@ -80,8 +92,13 @@ export class SceneCanvasComponent implements OnInit {
 
     this.step = 0
     var render = (time: number) => {
-      this.drawScene(gl, programInfo, 3);
-      requestAnimationFrame(render);
+      if (this.reset) {
+        this.main()
+        this.reset = false
+      } else {
+        this.drawScene(gl, programInfo, 3);
+        requestAnimationFrame(render);
+      }
     }
     requestAnimationFrame(render)
 
@@ -140,11 +157,11 @@ export class SceneCanvasComponent implements OnInit {
       gl.framebufferTexture2D(gl.FRAMEBUFFER, gl.COLOR_ATTACHMENT0, gl.TEXTURE_2D, targetTexture, level);
     }
 
-    this.imageToTexture(gl, "/assets/images/lens.png", texture => {
+    this.shaderService.imageToTexture(gl, "/assets/images/lens.png", texture => {
       this.textures.background = texture
     })
 
-    this.imageToTexture(gl, "/assets/images/grad.png", texture => {
+    this.shaderService.imageToTexture(gl, "/assets/images/grad.png", texture => {
       this.textures.gradient = texture
     })
 
@@ -152,34 +169,6 @@ export class SceneCanvasComponent implements OnInit {
       textures: textures,
       frameBuffers: frameBuffers
     }
-  }
-
-  imageToTexture(gl: WebGL2RenderingContext, src: string, onLoad: (texture: WebGLTexture) => void) {
-    const texture = gl.createTexture();
-    gl.bindTexture(gl.TEXTURE_2D, texture);
-
-    const level = 0;
-    const internalFormat = gl.RGBA32F;
-    const border = 0;
-    const format = gl.RGBA;
-    const type = gl.FLOAT;
-    const data = new Float32Array([0, 0, 255, 255]);
-    gl.texImage2D(gl.TEXTURE_2D, level, internalFormat,
-                  1, 1, border,
-                  format, type, data);
-    gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_MIN_FILTER, gl.NEAREST);
-    gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_MAG_FILTER, gl.NEAREST);
-    gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_WRAP_S, gl.CLAMP_TO_EDGE);
-    gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_WRAP_T, gl.CLAMP_TO_EDGE);
-    var image = new Image();
-    image.src = src;
-    image.addEventListener('load', function() {
-      gl.bindTexture(gl.TEXTURE_2D, texture);
-      gl.texImage2D(gl.TEXTURE_2D, 0, gl.RGBA32F, gl.RGBA, gl.FLOAT, image);
-      if (texture) {
-        onLoad(texture)
-      }
-    });
   }
 
   drawScene(gl: WebGL2RenderingContext, programInfo: any, iterations: number = 1) {
@@ -217,7 +206,11 @@ export class SceneCanvasComponent implements OnInit {
       gl.activeTexture(gl.TEXTURE0);
       gl.bindTexture(gl.TEXTURE_2D, this.textures.textures[(this.textureOffset) % 2]);
       gl.activeTexture(gl.TEXTURE1);
-      gl.bindTexture(gl.TEXTURE_2D, this.textures.background);
+      var backgroundTexture = this.textures.background
+      if (this.parameters.texture && this.parameters.texture.background) {
+        backgroundTexture = this.parameters.texture.background
+      }
+      gl.bindTexture(gl.TEXTURE_2D, backgroundTexture);
       gl.drawArrays(gl.TRIANGLE_STRIP, 0, 4)
 
       gl.bindFramebuffer(gl.FRAMEBUFFER, null);
@@ -247,9 +240,17 @@ export class SceneCanvasComponent implements OnInit {
       gl.activeTexture(gl.TEXTURE0);
       gl.bindTexture(gl.TEXTURE_2D, this.textures.textures[(this.textureOffset + 1) % 2]);
       gl.activeTexture(gl.TEXTURE1);
-      gl.bindTexture(gl.TEXTURE_2D, this.textures.background);
+      var backgroundTexture = this.textures.background
+      if (this.parameters.texture && this.parameters.texture.background) {
+        backgroundTexture = this.parameters.texture.background
+      }
+      gl.bindTexture(gl.TEXTURE_2D, backgroundTexture);
       gl.activeTexture(gl.TEXTURE2);
-      gl.bindTexture(gl.TEXTURE_2D, this.textures.gradient);
+      var gradientTexture = this.textures.gradient
+      if (this.parameters.texture && this.parameters.texture.gradient) {
+        gradientTexture = this.parameters.texture.gradient
+      }
+      gl.bindTexture(gl.TEXTURE_2D, gradientTexture);
       gl.drawArrays(gl.TRIANGLE_STRIP, 0, 4)
 
       this.textureOffset += 1

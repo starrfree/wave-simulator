@@ -10,6 +10,7 @@ export class ShaderService {
   computeFragmentSource = ""
   renderVertexSource = ""
   renderFragmentSource = ""
+  gl!: WebGL2RenderingContext
 
   didInit = false
   onInit: Observable<any>
@@ -75,5 +76,33 @@ export class ShaderService {
       return null
     }
     return shader
+  }
+
+  imageToTexture(gl: WebGL2RenderingContext, src: string, onLoad: (texture: WebGLTexture) => void) {
+    const texture = gl.createTexture();
+    gl.bindTexture(gl.TEXTURE_2D, texture);
+
+    const level = 0;
+    const internalFormat = gl.RGBA32F;
+    const border = 0;
+    const format = gl.RGBA;
+    const type = gl.FLOAT;
+    const data = new Float32Array([0, 0, 0, 255]);
+    gl.texImage2D(gl.TEXTURE_2D, level, internalFormat,
+                  1, 1, border,
+                  format, type, data);
+    gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_MIN_FILTER, gl.NEAREST);
+    gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_MAG_FILTER, gl.NEAREST);
+    gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_WRAP_S, gl.CLAMP_TO_EDGE);
+    gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_WRAP_T, gl.CLAMP_TO_EDGE);
+    var image = new Image();
+    image.src = src;
+    image.addEventListener('load', () => {
+      gl.bindTexture(gl.TEXTURE_2D, texture);
+      gl.texImage2D(gl.TEXTURE_2D, 0, gl.RGBA32F, gl.RGBA, gl.FLOAT, image);
+      if (texture) {
+        onLoad(texture)
+      }
+    });
   }
 }

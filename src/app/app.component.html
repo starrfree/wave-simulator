@@ -1,1 +1,9 @@
-<app-scene-canvas></app-scene-canvas>
+<div class="app-canvas-container">
+  <app-scene-canvas id="scene-canvas" class="notscrollable" [parameters]="parameters"></app-scene-canvas>
+</div>
+<div class="app-toolbar-container transform-animate" [style.transform]="fullScreen ? 'translate(-100%, 0)' : 'translate(0, 0)'">
+  <app-toolbar class="scrollable" [parameters]="parameters" (parametersChange)="parameters = $event; initialize()"></app-toolbar>
+</div>
+<div class="full-screen-button-container" [style.left]="fullScreen ? '10px' : '280px'">
+  <span class="full-screen-button material-symbols-rounded" (click)="toggleFullScreen()"> menu </span>
+</div>

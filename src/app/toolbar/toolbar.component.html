@@ -1,1 +1,29 @@
-<p>toolbar works!</p>
+<div class="container">
+  <div class="field-group">
+    <div class="field-container">
+      <div class="file-selects-container">
+        <div class="file-select-container">
+          <label class="file-select">
+            <input #gradientInput type="file" accept="image/*" (change)="selectGradient(gradientInput)">
+            Gradient
+            <div class="subtitle">{{gradientName}}</div>
+          </label>
+          <div *ngIf="parameters.texture && parameters.texture.gradient" id="gradient-reset" class="reset-button" (click)="resetGradient()">
+            <span class="material-symbols-rounded reset-label"> restart_alt </span>
+          </div>
+        </div>
+        <div class="file-select-container">
+          <label class="file-select after-field">
+            <input #backgroundInput type="file" accept="image/*" (change)="selectBackground(backgroundInput)">
+            Background
+            <div class="subtitle">{{backgroundName}}</div>
+          </label>
+          <div *ngIf="parameters.texture && parameters.texture.background" id="background-reset" class="reset-button" (click)="resetBackground()">
+            <span class="material-symbols-rounded reset-label"> restart_alt </span>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+  <div class="divider field-divider"></div>
+</div>
