@@ -1,4 +1,15 @@
 <div class="container">
+  <div class="small-field-group">
+    <div class="field-container">
+      <button mat-icon-button aria-label="play" (click)="togglePause()">
+        <mat-icon>{{parameters.pause ? 'play_arrow' : 'pause'}}</mat-icon>
+      </button>
+      <button mat-icon-button aria-label="play" (click)="reset()">
+        <mat-icon>restart_alt</mat-icon>
+      </button>
+    </div>
+  </div>
+  <div class="divider field-divider"></div>
   <div class="field-group">
     <div class="field-container">
       <div class="file-selects-container">

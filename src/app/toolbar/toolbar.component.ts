@@ -70,4 +70,13 @@ export class ToolbarComponent implements OnInit {
       }
     }
   }
+
+  togglePause() {
+    this.parameters.pause = !this.parameters.pause
+  }
+
+  reset() {
+    this.parameters.pause = false
+    this.parametersChange.emit(this.parameters)
+  }
 }

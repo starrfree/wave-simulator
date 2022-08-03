@@ -10,7 +10,9 @@ export class AppComponent {
   @ViewChild(SceneCanvasComponent) sceneComponent!: SceneCanvasComponent;
   title = 'wave-simulation';
   fullScreen: boolean = false
-  parameters: any = {}
+  parameters: any = {
+    pause: false
+  }
 
   toggleFullScreen(): void {
     this.fullScreen = !this.fullScreen

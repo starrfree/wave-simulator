@@ -11,6 +11,11 @@
   margin-bottom: 20px;
 }
 
+.small-field-group {
+  margin-top: 0px;
+  margin-bottom: 10px;
+}
+
 .file-select {
   border: 1px solid #ccc;
   display: inline-block;

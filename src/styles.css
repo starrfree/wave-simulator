@@ -24,3 +24,5 @@ a {
 a:focus {
   outline: 1px solid gray !important;
 }
+html, body { height: 100%; }
+body { margin: 0; font-family: Roboto, "Helvetica Neue", sans-serif; }

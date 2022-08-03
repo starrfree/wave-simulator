@@ -93,10 +93,12 @@ export class SceneCanvasComponent implements OnInit {
     this.step = 0
     var render = (time: number) => {
       if (this.reset) {
-        this.main()
         this.reset = false
+        this.main()
       } else {
-        this.drawScene(gl, programInfo, 3);
+        if (!this.parameters.pause) {
+          this.drawScene(gl, programInfo, 3);
+        }
         requestAnimationFrame(render);
       }
     }
@@ -108,6 +110,7 @@ export class SceneCanvasComponent implements OnInit {
       this.textures = this.initTextures(gl, this.canvas.nativeElement.width, this.canvas.nativeElement.height)
       this.step = 0
       gl.viewport(0, 0, gl.canvas.width, gl.canvas.height)
+      this.parameters.pause = false
       this.drawScene(gl, programInfo)
     }
     window.addEventListener('resize', resizeCanvas, false)
