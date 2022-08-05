@@ -13,8 +13,8 @@
   <div class="field-group">
     <div class="field-container">
       <div class="file-selects-container">
-        <div class="file-select-container">
-          <label class="file-select">
+        <div class="file-select-container" (drop)="onDropGradient($event)" (dragover)="dragOverGradient($event)" (dragleave)="dragLeaveGradient($event)">
+          <label class="file-select" [style.background] = "isHovering.gradient ? '#666' : 'inherit'">
             <input #gradientInput type="file" accept="image/*" (change)="selectGradient(gradientInput)">
             Gradient
             <div class="subtitle">{{gradientName}}</div>
@@ -23,8 +23,8 @@
             <span class="material-symbols-rounded reset-label"> restart_alt </span>
           </div>
         </div>
-        <div class="file-select-container">
-          <label class="file-select after-field">
+        <div class="file-select-container" (drop)="onDropBackground($event)" (dragover)="dragOverBackground($event)" (dragleave)="dragLeaveBackground($event)">
+          <label class="file-select after-field" [style.background] = "isHovering.background ? '#666' : 'inherit'">
             <input #backgroundInput type="file" accept="image/*" (change)="selectBackground(backgroundInput)">
             Background
             <div class="subtitle">{{backgroundName}}</div>
@@ -34,6 +34,13 @@
           </div>
         </div>
       </div>
+    </div>
+  </div>
+  <div class="divider field-divider"></div>
+  <div class="field-container checkbox-field">
+    <div class="checkbox-container">
+      <input #forceAspectRatio type="checkbox" [ngModel]="parameters.forceAspectRatio" (ngModelChange)="parameters.forceAspectRatio = $event; parametersChange.emit(parameters)">
+      <label for="forceAspectRatio" class="after-label">Force aspect ratio</label>
     </div>
   </div>
   <div class="divider field-divider"></div>

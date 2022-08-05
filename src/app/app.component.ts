@@ -11,7 +11,8 @@ export class AppComponent {
   title = 'wave-simulation';
   fullScreen: boolean = false
   parameters: any = {
-    pause: false
+    pause: false,
+    forceAspectRatio: true
   }
 
   toggleFullScreen(): void {

@@ -18,6 +18,25 @@ export class SceneCanvasComponent implements OnInit {
   buffers: any
   textures: any
 
+  get canvasSize() {
+    var height = ""
+    var width = ""
+    if (this.parameters.texture && this.parameters.texture.background && this.parameters.forceAspectRatio) {
+      var w = this.parameters.texture.background.width
+      var h = this.parameters.texture.background.height
+      width = `calc(100% - ${this.canvasWidthOffset})`
+      return `width: ${width}; aspect-ratio: ${w / h}`
+    } else {
+      width = `calc(100% - ${this.canvasWidthOffset})`
+      height = "100vh"
+      if (this.parameters.forceAspectRatio) {
+        return `width: ${width}; aspect-ratio: 3 / 2`
+      } else {
+        return `width: ${width}; height: ${height}`
+      }
+    }
+  }
+
   constructor(private shaderService: ShaderService) { 
     shaderService.onInit.subscribe((val) => {
       if (this.didInit) {
@@ -211,7 +230,7 @@ export class SceneCanvasComponent implements OnInit {
       gl.activeTexture(gl.TEXTURE1);
       var backgroundTexture = this.textures.background
       if (this.parameters.texture && this.parameters.texture.background) {
-        backgroundTexture = this.parameters.texture.background
+        backgroundTexture = this.parameters.texture.background.texture
       }
       gl.bindTexture(gl.TEXTURE_2D, backgroundTexture);
       gl.drawArrays(gl.TRIANGLE_STRIP, 0, 4)
@@ -245,7 +264,7 @@ export class SceneCanvasComponent implements OnInit {
       gl.activeTexture(gl.TEXTURE1);
       var backgroundTexture = this.textures.background
       if (this.parameters.texture && this.parameters.texture.background) {
-        backgroundTexture = this.parameters.texture.background
+        backgroundTexture = this.parameters.texture.background.texture
       }
       gl.bindTexture(gl.TEXTURE_2D, backgroundTexture);
       gl.activeTexture(gl.TEXTURE2);

@@ -78,7 +78,7 @@ export class ShaderService {
     return shader
   }
 
-  imageToTexture(gl: WebGL2RenderingContext, src: string, onLoad: (texture: WebGLTexture) => void) {
+  imageToTexture(gl: WebGL2RenderingContext, src: string, onLoad: (texture: WebGLTexture, width: number, height: number) => void) {
     const texture = gl.createTexture();
     gl.bindTexture(gl.TEXTURE_2D, texture);
 
@@ -101,7 +101,7 @@ export class ShaderService {
       gl.bindTexture(gl.TEXTURE_2D, texture);
       gl.texImage2D(gl.TEXTURE_2D, 0, gl.RGBA32F, gl.RGBA, gl.FLOAT, image);
       if (texture) {
-        onLoad(texture)
+        onLoad(texture, image.width, image.height)
       }
     });
   }

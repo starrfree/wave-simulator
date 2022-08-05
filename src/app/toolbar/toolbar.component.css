@@ -52,6 +52,7 @@ input[type="file"] {
   left: 8px;
   background-color: #222;
   cursor: pointer;
+  margin-bottom: -30px;
 }
 
 #gradient-reset {
@@ -84,4 +85,58 @@ input[type="file"] {
   width: 100%;
   margin: 0 10px 8px 10px;
   background-color: rgb(76, 76, 76);
+}
+
+.checkbox-field {
+  margin-left: -6px;
+  margin-bottom: 10px;
+}
+
+input[type="checkbox"] {
+  /* Add if not using autoprefixer */
+  -webkit-appearance: none;
+  /* Remove most all native input styles */
+  appearance: none;
+  /* For iOS < 15 */
+  background-color: rgb(76, 76, 76);
+  /* Not removed via appearance */
+  margin: 0;
+
+  font: inherit;
+  color: rgb(176, 176, 176);
+  width: 1.15em;
+  height: 1.15em;
+  border: 0.1em solid rgb(176, 176, 176);
+  border-radius: 0.15em;
+  transform: translateY(-0.075em);
+
+  display: grid;
+  place-content: center;
+  margin-left: 5px;
+  margin-bottom: 8px;
+}
+
+input[type="checkbox"]::before {
+  content: "";
+  width: 0.65em;
+  height: 0.65em;
+  clip-path: polygon(14% 44%, 0 65%, 50% 100%, 100% 16%, 80% 0%, 43% 62%);
+  transform: scale(0);
+  transform-origin: center center;
+  transition: 120ms transform ease-in-out;
+  box-shadow: inset 1em 1em white;
+}
+
+input[type="checkbox"]:checked::before {
+  transform: scale(1);
+}
+
+.checkbox-container {
+  display: inline-flex;
+}
+
+.after-label {
+  margin-left: .6em;
+  position: relative;
+  top: -1px;
 }
