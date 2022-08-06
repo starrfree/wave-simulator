@@ -25,7 +25,8 @@ export class ToolbarComponent implements OnInit {
 
   resetGradient() {
     this.gradientName = this.defaultName
-    this.parameters.texture.gradient = undefined
+    delete this.parameters.texture.gradient
+    this.parameters.nextFrame++
   }
 
   selectGradient(input: any) {
@@ -41,6 +42,7 @@ export class ToolbarComponent implements OnInit {
     if (files.length > 0) {
       this.setGradient(files[0])
     }
+    this.isHovering.gradient = false
   }
   
   dragOverGradient(event: any) {
@@ -67,13 +69,14 @@ export class ToolbarComponent implements OnInit {
             gradient: texture
           }
         }
+        this.parameters.nextFrame++;
       })
     }
   }
 
   resetBackground() {
     this.backgroundName = this.defaultName
-    this.parameters.texture.background = undefined
+    delete this.parameters.texture.background
     this.parametersChange.emit(this.parameters)
   }
 
@@ -90,6 +93,7 @@ export class ToolbarComponent implements OnInit {
     if (files.length > 0) {
       this.setBackground(files[0])
     }
+    this.isHovering.background = false
   }
   
   dragOverBackground(event: any) {
@@ -147,5 +151,14 @@ export class ToolbarComponent implements OnInit {
   reset() {
     this.parameters.pause = false
     this.parametersChange.emit(this.parameters)
+  }
+
+  nextFrame() {
+    this.parameters.nextFrame += 5
+  }
+
+  toggleEnergy() {
+    this.parameters.energy = !this.parameters.energy
+    this.parameters.nextFrame++
   }
 }

@@ -31,11 +31,11 @@ void main() {
     vec2 middleId = readId / vec2(u_Width, u_Height);
     vec2 rightId = (readId + vec2(1, 0)) / vec2(u_Width, u_Height);
     vec2 leftId = (readId + vec2(-1, 0)) / vec2(u_Width, u_Height);
-    vec2 topId = (readId + vec2(0, 1)) / vec2(u_Width, u_Height);
-    vec2 bottomId = (readId + vec2(0, -1)) / vec2(u_Width, u_Height);
+    vec2 topId = (readId + vec2(0, -1)) / vec2(u_Width, u_Height);
+    vec2 bottomId = (readId + vec2(0, 1)) / vec2(u_Width, u_Height);
 
     vec4 middle = texture(u_Texture, middleId);
-    vec4 border = vec4(0);//vec4(middle.y, 0.0, 0.0 , 1.0);//
+    vec4 border = vec4(middle.y, 0.0, 0.0 , 1.0);//vec4(0);//vec4(middle.x, 0.0, 0.0 , 1.0);//
     if (texture(u_Background_Texture, middleId).a > aCeil) {
       middle = border;
     }
@@ -63,6 +63,6 @@ void main() {
     float dfy = top.x - 2.0 * middle.x + bottom.x;
     float c = 1.0 - a;
     float newValue = c*c * (dfx / (dx * dx) + dfy / (dy * dy)) * dt*dt + 2.0 * middle.x - middle.y;
-    o_FragColor = vec4(newValue, middle.x, 0.0, 1.0);
+    o_FragColor = vec4(newValue, middle.x, middle.z + newValue * newValue, 1.0);
   }
 }

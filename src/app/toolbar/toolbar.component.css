@@ -12,7 +12,7 @@
 }
 
 .small-field-group {
-  margin-top: 0px;
+  margin-top: -5px;
   margin-bottom: 10px;
 }
 
@@ -42,27 +42,25 @@ input[type="file"] {
 }
 
 .reset-button {
-  color: rgb(255, 100, 100);
-  border: 2px solid rgb(255, 100, 100);
+  /* color: rgb(255, 100, 100); */
+  border: 2px solid;
   border-radius: 100%;
   width: 19px;
   height: 19px;
   position: relative;
-  top: -12px;
-  left: 8px;
   background-color: #222;
   cursor: pointer;
   margin-bottom: -30px;
 }
 
 #gradient-reset {
-  top: -12px;
-  left: -9px;
+  top: -14px;
+  left: -7px;
 }
 
 #background-reset {
-  top: -12px;
-  left: 8px;
+  top: -14px;
+  left: 10px;
 }
 
 
@@ -135,8 +133,70 @@ input[type="checkbox"]:checked::before {
   display: inline-flex;
 }
 
+input[type="radio"] {
+  /* Add if not using autoprefixer */
+  -webkit-appearance: none;
+  /* Remove most all native input styles */
+  appearance: none;
+  /* For iOS < 15 */
+  background-color: rgb(76, 76, 76);
+  /* Not removed via appearance */
+  margin: 0;
+
+  font: inherit;
+  color: rgb(176, 176, 176);
+  width: 1em;
+  height: 1em;
+  border: 0.1em solid rgb(176, 176, 176);
+  border-radius: 50%;
+  display: grid;
+  place-content: center;
+}
+
+input[type="radio"]::before {
+  content: "";
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  transform: scale(0);
+  transition: 120ms transform ease-in-out;
+  box-shadow: inset 1em 1em white;
+}
+
+input[type="radio"]:checked::before {
+  transform: scale(1);
+}
+
+.radio-container {
+  margin-left: -1px;
+  display: inline-flex;
+}
+
 .after-label {
   margin-left: .6em;
   position: relative;
   top: -1px;
+}
+
+.before-label {
+  margin-right: 1em;
+  position: relative;
+  top: -1px;
+  margin-left: .3em;
+}
+
+.radio-label {
+  margin-right: 10px;
+  margin-top: -0.5px;
+}
+
+.title {
+  padding: 20px 0 20px 20px;
+}
+
+.title-a {
+  font-size: 27px;
+  font-weight: 700;
+  color:rgb(220, 220, 220);
+  text-decoration: none;
 }

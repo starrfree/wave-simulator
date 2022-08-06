@@ -19,20 +19,19 @@ export class SceneCanvasComponent implements OnInit {
   textures: any
 
   get canvasSize() {
-    var height = ""
+    var height = "100vh"
     var width = ""
     if (this.parameters.texture && this.parameters.texture.background && this.parameters.forceAspectRatio) {
       var w = this.parameters.texture.background.width
       var h = this.parameters.texture.background.height
       width = `calc(100% - ${this.canvasWidthOffset})`
-      return `width: ${width}; aspect-ratio: ${w / h}`
+      return `left: ${this.canvasWidthOffset}; max-width: ${width}; max-height: ${height}; aspect-ratio: ${w / h}; object-fit: contain`
     } else {
       width = `calc(100% - ${this.canvasWidthOffset})`
-      height = "100vh"
       if (this.parameters.forceAspectRatio) {
-        return `width: ${width}; aspect-ratio: 3 / 2`
+        return `left: ${this.canvasWidthOffset}; max-width: ${width}; max-height: ${height}; aspect-ratio: 3 / 2; object-fit: contain`
       } else {
-        return `width: ${width}; height: ${height}`
+        return `left: ${this.canvasWidthOffset}; width: ${width}; height: ${height}`
       }
     }
   }
@@ -92,8 +91,10 @@ export class SceneCanvasComponent implements OnInit {
           backgroundTexture: gl.getUniformLocation(computeShaderProgram, 'u_Background_Texture')
         },
         render: {
+          step: gl.getUniformLocation(renderShaderProgram, 'u_Step'),
           width: gl.getUniformLocation(renderShaderProgram, 'u_Width'),
           height: gl.getUniformLocation(renderShaderProgram, 'u_Height'),
+          energy: gl.getUniformLocation(renderShaderProgram, 'u_Energy'),
           texture: gl.getUniformLocation(renderShaderProgram, 'u_Texture'),
           backgroundTexture: gl.getUniformLocation(renderShaderProgram, 'u_Background_Texture'),
           gradientTexture: gl.getUniformLocation(renderShaderProgram, 'u_Gradient_Texture')
@@ -115,8 +116,11 @@ export class SceneCanvasComponent implements OnInit {
         this.reset = false
         this.main()
       } else {
-        if (!this.parameters.pause) {
+        if (!this.parameters.pause || this.parameters.nextFrame > 0) {
           this.drawScene(gl, programInfo, 3);
+          if (this.parameters.nextFrame > 0) {
+            this.parameters.nextFrame--
+          }
         }
         requestAnimationFrame(render);
       }
@@ -124,8 +128,25 @@ export class SceneCanvasComponent implements OnInit {
     requestAnimationFrame(render)
 
     const resizeCanvas = () => {
-      this.canvas.nativeElement.width = 2 * this.canvas.nativeElement.clientWidth
-      this.canvas.nativeElement.height = 2 * this.canvas.nativeElement.clientHeight
+      var ratio: number = this.canvas.nativeElement.clientWidth / this.canvas.nativeElement.clientHeight
+      if (this.parameters.texture && this.parameters.texture.background) {
+        if (this.parameters.forceAspectRatio) {
+          this.canvas.nativeElement.width = this.parameters.texture.background.width / this.parameters.LOD
+          this.canvas.nativeElement.height = this.parameters.texture.background.height / this.parameters.LOD
+        } else {
+          this.canvas.nativeElement.width = this.parameters.texture.background.width / this.parameters.LOD
+          this.canvas.nativeElement.height = (this.parameters.texture.background.width / ratio) / this.parameters.LOD
+        }
+      } else {
+        if (this.parameters.forceAspectRatio) {
+          this.canvas.nativeElement.width = 3000 / this.parameters.LOD
+          this.canvas.nativeElement.height = 2000 / this.parameters.LOD
+        } else {
+          this.canvas.nativeElement.width = 3000 / this.parameters.LOD
+          this.canvas.nativeElement.height = (2000 / ratio) / this.parameters.LOD
+        }
+      }
+      
       this.textures = this.initTextures(gl, this.canvas.nativeElement.width, this.canvas.nativeElement.height)
       this.step = 0
       gl.viewport(0, 0, gl.canvas.width, gl.canvas.height)
@@ -238,8 +259,10 @@ export class SceneCanvasComponent implements OnInit {
       gl.bindFramebuffer(gl.FRAMEBUFFER, null);
 
       gl.useProgram(programInfo.renderProgram)
+      gl.uniform1i(programInfo.uniformLocations.render.step, this.step)
       gl.uniform1f(programInfo.uniformLocations.render.width, gl.canvas.width)
       gl.uniform1f(programInfo.uniformLocations.render.height, gl.canvas.height)
+      gl.uniform1i(programInfo.uniformLocations.render.energy, this.parameters.energy ? 1 : 0)
       gl.uniform1i(programInfo.uniformLocations.render.texture, 0);
       gl.uniform1i(programInfo.uniformLocations.render.backgroundTexture, 1);
       gl.uniform1i(programInfo.uniformLocations.render.gradientTexture, 2);

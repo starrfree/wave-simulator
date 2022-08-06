@@ -12,7 +12,10 @@ export class AppComponent {
   fullScreen: boolean = false
   parameters: any = {
     pause: false,
-    forceAspectRatio: true
+    nextFrame: 0,
+    forceAspectRatio: true,
+    LOD: 1,
+    energy: false
   }
 
   toggleFullScreen(): void {
