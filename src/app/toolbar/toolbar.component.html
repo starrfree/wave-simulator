@@ -20,25 +20,47 @@
   <div class="field-group">
     <div class="field-container">
       <div class="file-selects-container">
-        <div class="file-select-container" (drop)="onDropGradient($event)" (dragover)="dragOverGradient($event)" (dragleave)="dragLeaveGradient($event)">
-          <label class="file-select" [style.background] = "isHovering.gradient ? '#666' : 'inherit'">
-            <input #gradientInput type="file" accept="image/*" (change)="selectGradient(gradientInput)">
-            Gradient
-            <div class="subtitle">{{gradientName}}</div>
-          </label>
-          <!-- <div *ngIf="parameters.texture && parameters.texture.gradient" id="gradient-reset" class="reset-button" (click)="resetGradient()">
-            <span class="material-symbols-rounded reset-label"> close </span>
-          </div> -->
-        </div>
-        <div class="file-select-container" (drop)="onDropBackground($event)" (dragover)="dragOverBackground($event)" (dragleave)="dragLeaveBackground($event)">
-          <label class="file-select after-field" [style.background] = "isHovering.background ? '#666' : 'inherit'">
-            <input #backgroundInput type="file" accept="image/*" (change)="selectBackground(backgroundInput)">
+        <input hidden #backgroundInput type="file" accept="image/*" (change)="selectBackground(backgroundInput)">
+        <div class="file-select-container" [matMenuTriggerFor]="backgroundMenu" (drop)="onDropBackground($event)" (dragover)="dragOverBackground($event)" (dragleave)="dragLeaveBackground($event)">
+          <label class="file-select" [style.background] = "isHovering.background ? '#666' : 'inherit'">
             Background
             <div class="subtitle">{{backgroundName}}</div>
           </label>
-          <!-- <div *ngIf="parameters.texture && parameters.texture.background" id="background-reset" class="reset-button" (click)="resetBackground()">
-            <span class="material-symbols-rounded reset-label"> close </span>
-          </div> -->
+          <mat-menu #backgroundMenu="matMenu">
+            <button mat-menu-item [matMenuTriggerFor]="fileBackground">File</button>
+            <button mat-menu-item [matMenuTriggerFor]="templateBackground">Templates</button>
+          </mat-menu>
+          <mat-menu #fileBackground="matMenu">
+            <button mat-menu-item (click)="backgroundInput.click()">Open</button>
+            <a href="assets/images/exemples/Background Exemple.png" download mat-menu-item>Download Exemple</a>
+          </mat-menu>
+          <mat-menu #templateBackground="matMenu">
+            <button mat-menu-item (click)="resetBackground()">Lens <span style="color: #aaa">(default)</span></button>
+            <button mat-menu-item (click)="setBackgroundTexture('assets/images/backgrounds/double slit.png', 'Double Slit')">Double Slit</button>
+            <button mat-menu-item (click)="setBackgroundTexture('assets/images/backgrounds/parabolla.png', 'Parabolla')">Parabolla</button>
+            <button mat-menu-item (click)="setBackgroundTexture('assets/images/backgrounds/fresnel lens.png', 'Parabolla')">Fresnel Lens</button>
+          </mat-menu>
+        </div>
+        <input hidden #gradientInput type="file" accept="image/*" (change)="selectGradient(gradientInput)">
+        <div class="file-select-container after-field" [matMenuTriggerFor]="gradientMenu" (drop)="onDropGradient($event)" (dragover)="dragOverGradient($event)" (dragleave)="dragLeaveGradient($event)">
+          <label class="file-select" [style.background] = "isHovering.gradient ? '#666' : 'inherit'">
+            Gradient
+            <div class="subtitle">{{gradientName}}</div>
+          </label>
+          <mat-menu #gradientMenu="matMenu">
+            <button mat-menu-item [matMenuTriggerFor]="fileGradient">File</button>
+            <button mat-menu-item [matMenuTriggerFor]="templateGradient">Templates</button>
+          </mat-menu>
+          <mat-menu #fileGradient="matMenu">
+            <button mat-menu-item (click)="gradientInput.click()">Open</button>
+            <a href="assets/images/exemples/Gradient Exemple.png" download mat-menu-item>Download Exemple</a>
+          </mat-menu>
+          <mat-menu #templateGradient="matMenu">
+            <button mat-menu-item (click)="resetGradient()">Blue White Red <span style="color: #aaa">(default)</span></button>
+            <button mat-menu-item (click)="setGradientTexture('assets/images/gradients/plasma.png', 'Plasma')">Plasma</button>
+            <button mat-menu-item (click)="setGradientTexture('assets/images/gradients/viridis.png', 'Viridis')">Viridis</button>
+            <button mat-menu-item (click)="setGradientTexture('assets/images/gradients/heat.png', 'Heat')">Heat</button>
+          </mat-menu>
         </div>
       </div>
     </div>

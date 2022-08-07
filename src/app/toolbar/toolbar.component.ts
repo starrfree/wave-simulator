@@ -30,6 +30,7 @@ export class ToolbarComponent implements OnInit {
   }
 
   selectGradient(input: any) {
+    console.log(input.files)
     if (input.files && input.files[0]) {
       this.setGradient(input.files[0])
     }
@@ -60,24 +61,30 @@ export class ToolbarComponent implements OnInit {
     reader.readAsDataURL(file)
     reader.onload = (event : any) => {
       var src = event.target.result
-      this.gradientName = file.name
-      this.shaderService.imageToTexture(this.shaderService.gl, src, texture => {
-        if (this.parameters.texture) {
-          this.parameters.texture.gradient = texture
-        } else {
-          this.parameters.texture = {
-            gradient: texture
-          }
-        }
-        this.parameters.nextFrame++;
-      })
+      this.setGradientTexture(src, file.name)
     }
+  }
+
+  setGradientTexture(src: string, name: string) {
+    this.gradientName = name
+    this.shaderService.imageToTexture(this.shaderService.gl, src, texture => {
+      if (this.parameters.texture) {
+        this.parameters.texture.gradient = texture
+      } else {
+        this.parameters.texture = {
+          gradient: texture
+        }
+      }
+      this.parameters.nextFrame++;
+    })
   }
 
   resetBackground() {
     this.backgroundName = this.defaultName
-    delete this.parameters.texture.background
-    this.parametersChange.emit(this.parameters)
+    if (this.parameters.texture && this.parameters.texture.background) {
+      delete this.parameters.texture.background
+      this.parametersChange.emit(this.parameters)
+    }
   }
 
   selectBackground(input: any) {
@@ -111,26 +118,30 @@ export class ToolbarComponent implements OnInit {
     reader.readAsDataURL(file)
     reader.onload = (event : any) => {
       var src = event.target.result
-      this.backgroundName = file.name
-      this.shaderService.imageToTexture(this.shaderService.gl, src, (texture, w, h) => {
-        if (this.parameters.texture) {
-          this.parameters.texture.background = {
+      this.setBackgroundTexture(src, file.name)
+    }
+  }
+
+  setBackgroundTexture(src: string, name: string) {
+    this.backgroundName = name
+    this.shaderService.imageToTexture(this.shaderService.gl, src, (texture, w, h) => {
+      if (this.parameters.texture) {
+        this.parameters.texture.background = {
+          texture: texture,
+          width: w,
+          height: h
+        }
+      } else {
+        this.parameters.texture = {
+          background: {
             texture: texture,
             width: w,
             height: h
-          }
-        } else {
-          this.parameters.texture = {
-            background: {
-              texture: texture,
-              width: w,
-              height: h
-            },
-          }
+          },
         }
-        this.parametersChange.emit(this.parameters)
-      })
-    }
+      }
+      this.parametersChange.emit(this.parameters)
+    })
   }
 
   // @HostListener('document:keypress', ['$event'])
