@@ -87,6 +87,7 @@ export class SceneCanvasComponent implements OnInit {
           step: gl.getUniformLocation(computeShaderProgram, 'u_Step'),
           width: gl.getUniformLocation(computeShaderProgram, 'u_Width'),
           height: gl.getUniformLocation(computeShaderProgram, 'u_Height'),
+          boundary: gl.getUniformLocation(computeShaderProgram, 'u_Boundary'),
           texture: gl.getUniformLocation(computeShaderProgram, 'u_Texture'),
           backgroundTexture: gl.getUniformLocation(computeShaderProgram, 'u_Background_Texture')
         },
@@ -226,6 +227,7 @@ export class SceneCanvasComponent implements OnInit {
       gl.uniform1i(programInfo.uniformLocations.compute.step, this.step)
       gl.uniform1f(programInfo.uniformLocations.compute.width, gl.canvas.width)
       gl.uniform1f(programInfo.uniformLocations.compute.height, gl.canvas.height)
+      gl.uniform1i(programInfo.uniformLocations.compute.boundary, this.parameters.boundary)
       gl.uniform1i(programInfo.uniformLocations.compute.texture, 0);
       gl.uniform1i(programInfo.uniformLocations.compute.backgroundTexture, 1);
       {

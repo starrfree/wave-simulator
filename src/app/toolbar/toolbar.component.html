@@ -26,9 +26,9 @@
             Gradient
             <div class="subtitle">{{gradientName}}</div>
           </label>
-          <div *ngIf="parameters.texture && parameters.texture.gradient" id="gradient-reset" class="reset-button" (click)="resetGradient()">
+          <!-- <div *ngIf="parameters.texture && parameters.texture.gradient" id="gradient-reset" class="reset-button" (click)="resetGradient()">
             <span class="material-symbols-rounded reset-label"> close </span>
-          </div>
+          </div> -->
         </div>
         <div class="file-select-container" (drop)="onDropBackground($event)" (dragover)="dragOverBackground($event)" (dragleave)="dragLeaveBackground($event)">
           <label class="file-select after-field" [style.background] = "isHovering.background ? '#666' : 'inherit'">
@@ -36,9 +36,9 @@
             Background
             <div class="subtitle">{{backgroundName}}</div>
           </label>
-          <div *ngIf="parameters.texture && parameters.texture.background" id="background-reset" class="reset-button" (click)="resetBackground()">
+          <!-- <div *ngIf="parameters.texture && parameters.texture.background" id="background-reset" class="reset-button" (click)="resetBackground()">
             <span class="material-symbols-rounded reset-label"> close </span>
-          </div>
+          </div> -->
         </div>
       </div>
     </div>
@@ -51,8 +51,8 @@
         <label for="forceAspectRatio" class="after-label">Keep aspect ratio</label>
       </div>
     </div>
+    <div class="radio-label field-container">Quality</div>
     <div class="field-container radio-container">
-      <span class="radio-label">Quality</span>
       <input type="radio" id="LODChoice1" name="LOD" [value]="1" [(ngModel)]="parameters.LOD" (change)="parametersChange.emit(parameters)">
       <label for="LODChoice1" class="before-label">High</label>
 
@@ -64,10 +64,23 @@
     </div>
   </div>
   <div class="divider field-divider"></div>
-  <div class="field-container checkbox-field">
-    <div class="checkbox-container">
-      <input #energy type="checkbox" (click)="toggleEnergy()">
-      <label for="energy" class="after-label">Average energy</label>
+    <div class="field-group">
+    <div class="field-container checkbox-field">
+      <div class="checkbox-container">
+        <input #energy type="checkbox" (click)="toggleEnergy()">
+        <label for="energy" class="after-label">Average energy</label>
+      </div>
+    </div>
+    <div class="field-container radio-label">Boundary</div>
+    <div class="field-container radio-container">
+      <input type="radio" id="boundaryChoice1" name="boundary" [value]="0" [(ngModel)]="parameters.boundary" (change)="parametersChange.emit(parameters)">
+      <label for="boundaryChoice1" class="before-label">Absorb</label>
+
+      <input type="radio" id="boundaryChoice2" name="boundary" [value]="1" [(ngModel)]="parameters.boundary" (change)="parametersChange.emit(parameters)">
+      <label for="boundaryChoice2" class="before-label">Reflect</label>
+
+      <input type="radio" id="boundaryChoice3" name="boundary" [value]="2" [(ngModel)]="parameters.boundary" (change)="parametersChange.emit(parameters)">
+      <label for="boundaryChoice3" class="before-label">Zero</label>
     </div>
   </div>
   <div class="divider field-divider"></div>

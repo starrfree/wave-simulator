@@ -4,6 +4,7 @@ precision highp float;
 uniform int u_Step;
 uniform float u_Width;
 uniform float u_Height;
+uniform int u_Boundary;
 uniform sampler2D u_Texture;
 uniform sampler2D u_Background_Texture;
 
@@ -35,7 +36,17 @@ void main() {
     vec2 bottomId = (readId + vec2(0, 1)) / vec2(u_Width, u_Height);
 
     vec4 middle = texture(u_Texture, middleId);
-    vec4 border = vec4(middle.y, 0.0, 0.0 , 1.0);//vec4(0);//vec4(middle.x, 0.0, 0.0 , 1.0);//
+    vec4 border;
+    switch (u_Boundary) {
+      case 0:
+        border = vec4(middle.y, 0.0, 0.0 , 1.0);
+        break;
+      case 1:
+        border = vec4(middle.x, 0.0, 0.0 , 1.0);
+        break;
+      case 2:
+        border = vec4(0);
+    }
     if (texture(u_Background_Texture, middleId).a > aCeil) {
       middle = border;
     }

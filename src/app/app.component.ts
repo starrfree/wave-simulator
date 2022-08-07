@@ -15,7 +15,8 @@ export class AppComponent {
     nextFrame: 0,
     forceAspectRatio: true,
     LOD: 1,
-    energy: false
+    energy: false,
+    boundary: 0
   }
 
   toggleFullScreen(): void {
