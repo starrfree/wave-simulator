@@ -1,2 +1,6 @@
-<canvas #glCanvas style="position: absolute; top: 0; text-align: right;
-background-color: black; {{canvasSize}}; transition: 310ms width ease-in-out; transition: 310ms left ease-in-out;"></canvas>
+<div class="container" style="{{canvasSize}}">
+  <canvas #glCanvas style="position: absolute; top: 0; text-align: right;
+  background-color: black; width: 100%; height: 100%;">
+  </canvas>
+  <img *ngIf="parameters.showGradient" class="gradient-image" [src]="gradientSrc">
+</div>

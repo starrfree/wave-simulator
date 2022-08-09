@@ -7,24 +7,108 @@ import { ShaderService } from '../shader.service';
   styleUrls: ['./toolbar.component.css']
 })
 export class ToolbarComponent implements OnInit {
-  defaultName = "default"
-  gradientName = this.defaultName
-  backgroundName = this.defaultName
+  @Input() parameters: any = {}
+  @Output() parametersChange = new EventEmitter<any>()
+
+  defaultGradientName = "Blue White Red"
+  defaultBackgroundName = "Lens"
+  gradientName = this.defaultGradientName
+  backgroundName = this.defaultBackgroundName
   isHovering: any = {
     gradient: false,
     background: false
   }
+  
+  frequency: string = "";
+  setFrequency() {
+    var x = +this.frequency;
+    if (!isNaN(x)) {
+      if (this.parameters.initialCondition.c4 != x) {
+        this.parameters.initialCondition.c4 = x;
+        this.parametersChange.emit(this.parameters)
+      }
+    }
+  }
 
-  @Input() parameters: any = {}
-  @Output() parametersChange = new EventEmitter<any>()
+  duration: string = "";
+  setDuration() {
+    var x = +this.duration;
+    if (!isNaN(x)) {
+      if (this.parameters.initialCondition.c2 != x) {
+        this.parameters.initialCondition.c2 = x;
+        this.parametersChange.emit(this.parameters)
+      }
+    }
+  }
+
+  duration2: string = "";
+  setDuration2() {
+    var x = +this.duration2;
+    if (!isNaN(x)) {
+      if (this.parameters.initialCondition.c5 != x) {
+        this.parameters.initialCondition.c5 = x;
+        this.parametersChange.emit(this.parameters)
+      }
+    }
+  }
+
+  amplitude: string = "";
+  setAmplitude() {
+    var x = +this.amplitude;
+    if (!isNaN(x)) {
+      if (this.parameters.initialCondition.c3 != x) {
+        this.parameters.initialCondition.c3 = x;
+        this.parametersChange.emit(this.parameters)
+      }
+    }
+  }
+
+  x: string = "";
+  setX() {
+    var x = +this.x;
+    if (!isNaN(x)) {
+      if (this.parameters.initialCondition.c1 != x) {
+        this.parameters.initialCondition.c1 = x;
+        this.parametersChange.emit(this.parameters)
+      }
+    }
+  }
+
+  y: string = "";
+  setY() {
+    var x = +this.y;
+    if (!isNaN(x)) {
+      if (this.parameters.initialCondition.c2 != x) {
+        this.parameters.initialCondition.c2 = x;
+        this.parametersChange.emit(this.parameters)
+      }
+    }
+  }
 
   constructor(private shaderService: ShaderService) { }
 
   ngOnInit(): void {
+    this.initInitialConditionsParams()
+  }
+
+  initInitialConditionsParams() {
+    this.frequency = `${this.parameters.initialCondition.c4}`
+    this.duration = `${this.parameters.initialCondition.c2}`
+    this.amplitude = `${this.parameters.initialCondition.c3}`
+    this.x = `${this.parameters.initialCondition.c1}`
+    this.y = `${this.parameters.initialCondition.c2}`
+    this.duration2 = `${this.parameters.initialCondition.c5}`
+  }
+
+  blur() {
+    (document.activeElement as HTMLElement).blur();
+    window.onblur = function () {
+      (document.activeElement as HTMLElement).blur();
+    };
   }
 
   resetGradient() {
-    this.gradientName = this.defaultName
+    this.gradientName = this.defaultGradientName
     delete this.parameters.texture.gradient
     this.parameters.nextFrame++
   }
@@ -69,18 +153,24 @@ export class ToolbarComponent implements OnInit {
     this.gradientName = name
     this.shaderService.imageToTexture(this.shaderService.gl, src, texture => {
       if (this.parameters.texture) {
-        this.parameters.texture.gradient = texture
+        this.parameters.texture.gradient = {
+          texture: texture,
+          src: src
+        }
       } else {
         this.parameters.texture = {
-          gradient: texture
+          gradient: {
+            texture: texture,
+            src: src
+          }
         }
       }
-      this.parameters.nextFrame++;
+      this.parameters.nextFrame++
     })
   }
 
   resetBackground() {
-    this.backgroundName = this.defaultName
+    this.backgroundName = this.defaultBackgroundName
     if (this.parameters.texture && this.parameters.texture.background) {
       delete this.parameters.texture.background
       this.parametersChange.emit(this.parameters)
@@ -171,5 +261,43 @@ export class ToolbarComponent implements OnInit {
   toggleEnergy() {
     this.parameters.energy = !this.parameters.energy
     this.parameters.nextFrame++
+  }
+
+  setInitialCondition(event: any) {
+    if (+event != this.parameters.initialCondition.type) {
+      switch (+event) {
+        case 0:
+          this.parameters.initialCondition = {
+            type: 0,
+            c1: 0,
+            c2: 800,
+            c3: 0.7,
+            c4: 0.05
+          }
+          this.parametersChange.emit(this.parameters)
+          break;
+        case 1:
+          this.parameters.initialCondition = {
+            type: 1,
+            c1: 0.5,
+            c2: 0.5,
+            c3: 10,
+            c4: 1
+          }
+          this.parametersChange.emit(this.parameters)
+          break;
+        case 2:
+          this.parameters.initialCondition = {
+            type: 2,
+            c1: 0.5,
+            c2: 0.5,
+            c3: 10,
+            c4: 0.04,
+            c5: 1000
+          }
+          this.parametersChange.emit(this.parameters)
+          break;
+      }
+    }
   }
 }

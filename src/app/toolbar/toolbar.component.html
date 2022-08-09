@@ -1,6 +1,6 @@
 <div class="container">
   <div class="title">
-    <a href="/" class="title-a">Wave Simulation</a>
+    <a href="/" class="title-a">Wave Simulator</a>
   </div>
   <!-- <div class="divider field-divider"></div> -->
   <div class="small-field-group">
@@ -8,11 +8,11 @@
       <button mat-icon-button aria-label="play" (click)="togglePause()">
         <mat-icon>{{parameters.pause ? 'play_arrow' : 'pause'}}</mat-icon>
       </button>
-      <button mat-icon-button aria-label="restart" (click)="reset()">
-        <mat-icon>restart_alt</mat-icon>
-      </button>
       <button mat-icon-button aria-label="next" (click)="nextFrame()">
         <mat-icon>skip_next</mat-icon>
+      </button>
+      <button mat-icon-button aria-label="restart" (click)="reset()">
+        <mat-icon>restart_alt</mat-icon>
       </button>
     </div>
   </div>
@@ -23,8 +23,8 @@
         <input hidden #backgroundInput type="file" accept="image/*" (change)="selectBackground(backgroundInput)">
         <div class="file-select-container" [matMenuTriggerFor]="backgroundMenu" (drop)="onDropBackground($event)" (dragover)="dragOverBackground($event)" (dragleave)="dragLeaveBackground($event)">
           <label class="file-select" [style.background] = "isHovering.background ? '#666' : 'inherit'">
-            Background
-            <div class="subtitle">{{backgroundName}}</div>
+            <span class="subtitle">Background</span>
+            <div class="select-title">{{backgroundName}}</div>
           </label>
           <mat-menu #backgroundMenu="matMenu">
             <button mat-menu-item [matMenuTriggerFor]="fileBackground">File</button>
@@ -38,14 +38,15 @@
             <button mat-menu-item (click)="resetBackground()">Lens <span style="color: #aaa">(default)</span></button>
             <button mat-menu-item (click)="setBackgroundTexture('assets/images/backgrounds/double slit.png', 'Double Slit')">Double Slit</button>
             <button mat-menu-item (click)="setBackgroundTexture('assets/images/backgrounds/parabolla.png', 'Parabolla')">Parabolla</button>
-            <button mat-menu-item (click)="setBackgroundTexture('assets/images/backgrounds/fresnel lens.png', 'Parabolla')">Fresnel Lens</button>
+            <button mat-menu-item (click)="setBackgroundTexture('assets/images/backgrounds/ellipse.png', 'Ellipse')">Ellipse</button>
+            <button mat-menu-item (click)="setBackgroundTexture('assets/images/backgrounds/fresnel lens.png', 'Fresnel Lens')">Fresnel Lens</button>
           </mat-menu>
         </div>
         <input hidden #gradientInput type="file" accept="image/*" (change)="selectGradient(gradientInput)">
-        <div class="file-select-container after-field" [matMenuTriggerFor]="gradientMenu" (drop)="onDropGradient($event)" (dragover)="dragOverGradient($event)" (dragleave)="dragLeaveGradient($event)">
+        <div class="file-select-container after-select" [matMenuTriggerFor]="gradientMenu" (drop)="onDropGradient($event)" (dragover)="dragOverGradient($event)" (dragleave)="dragLeaveGradient($event)">
           <label class="file-select" [style.background] = "isHovering.gradient ? '#666' : 'inherit'">
-            Gradient
-            <div class="subtitle">{{gradientName}}</div>
+            <span class="subtitle">Gradient</span>
+            <div class="select-title">{{gradientName}}</div>
           </label>
           <mat-menu #gradientMenu="matMenu">
             <button mat-menu-item [matMenuTriggerFor]="fileGradient">File</button>
@@ -57,12 +58,39 @@
           </mat-menu>
           <mat-menu #templateGradient="matMenu">
             <button mat-menu-item (click)="resetGradient()">Blue White Red <span style="color: #aaa">(default)</span></button>
+            <button mat-menu-item (click)="setGradientTexture('assets/images/gradients/grayscale.png', 'Gray Scale')">Gray Scale</button>
             <button mat-menu-item (click)="setGradientTexture('assets/images/gradients/plasma.png', 'Plasma')">Plasma</button>
             <button mat-menu-item (click)="setGradientTexture('assets/images/gradients/viridis.png', 'Viridis')">Viridis</button>
             <button mat-menu-item (click)="setGradientTexture('assets/images/gradients/heat.png', 'Heat')">Heat</button>
+            <button mat-menu-item (click)="setGradientTexture('assets/images/gradients/magma.png', 'Magma')">Magma</button>
           </mat-menu>
         </div>
       </div>
+    </div>
+  </div>
+  <div class="divider field-divider"></div>
+    <div class="field-group">
+    <div class="field-container checkbox-field">
+      <div class="checkbox-container">
+        <input #energy type="checkbox" (click)="toggleEnergy()">
+        <label for="energy" class="after-label">Average energy</label>
+      </div>
+    </div>
+    <div class="field-container radio-label">Boundary conditions</div>
+    <div class="field-container radio-container">
+      <input type="radio" id="boundaryChoice1" name="boundary" [value]="0" [(ngModel)]="parameters.boundary" (change)="parametersChange.emit(parameters)">
+      <label for="boundaryChoice1" class="before-label">Absorb</label>
+
+      <input type="radio" id="boundaryChoice2" name="boundary" [value]="1" [(ngModel)]="parameters.boundary" (change)="parametersChange.emit(parameters)">
+      <label for="boundaryChoice2" class="before-label">Reflect</label>
+
+      <input type="radio" id="boundaryChoice3" name="boundary" [value]="2" [(ngModel)]="parameters.boundary" (change)="parametersChange.emit(parameters)">
+      <label for="boundaryChoice3" class="before-label">Zero</label>
+    </div>
+    <div class="field-container range-container">
+      <div class="range-label">Alpha threshold</div>
+      <mat-slider id="aCeilRange" continuous min="0" max="1" step="0.05" [value]="parameters.aCeil" (input)="parameters.aCeil = $event.value"></mat-slider>
+      <label for="aCeilRange">{{parameters.aCeil | number : '1.2-2'}}</label>
     </div>
   </div>
   <div class="divider field-divider"></div>
@@ -73,7 +101,13 @@
         <label for="forceAspectRatio" class="after-label">Keep aspect ratio</label>
       </div>
     </div>
-    <div class="radio-label field-container">Quality</div>
+    <div class="field-container checkbox-field">
+      <div class="checkbox-container">
+        <input #forceAspectRatio type="checkbox" [(ngModel)]="parameters.showGradient">
+        <label for="forceAspectRatio" class="after-label">Show gradient legend</label>
+      </div>
+    </div>
+    <div class="radio-label field-container">Level of detail</div>
     <div class="field-container radio-container">
       <input type="radio" id="LODChoice1" name="LOD" [value]="1" [(ngModel)]="parameters.LOD" (change)="parametersChange.emit(parameters)">
       <label for="LODChoice1" class="before-label">High</label>
@@ -86,24 +120,90 @@
     </div>
   </div>
   <div class="divider field-divider"></div>
-    <div class="field-group">
-    <div class="field-container checkbox-field">
-      <div class="checkbox-container">
-        <input #energy type="checkbox" (click)="toggleEnergy()">
-        <label for="energy" class="after-label">Average energy</label>
+  <div class="field-group">
+    <div class="field-container parameters-label">Initial conditions</div>
+    <div class="field-container select-container">
+      <select name="initialConditions" id="initCond-select" [ngModel]="parameters.initialCondition.type" (ngModelChange)="setInitialCondition($event); this.initInitialConditionsParams()">
+        <option [value]="0">Plane Wave</option>
+        <option [value]="1">Pulse</option>
+        <option [value]="2">Spherical wave</option>
+      </select>    
+    </div>
+    
+    <!-- Plane Wave -->
+    <div class="parameters-container" *ngIf="parameters.initialCondition.type == 0">
+      <div class="radio-label field-container">Direction</div>
+      <div class="field-container radio-container">
+        <input type="radio" id="C1Choice1" name="c1" [value]="0" [(ngModel)]="parameters.initialCondition.c1" (change)="parametersChange.emit(parameters)">
+        <label for="C1Choice1" class="before-label">Left</label>
+
+        <input type="radio" id="C1Choice2" name="c1" [value]="1" [(ngModel)]="parameters.initialCondition.c1" (change)="parametersChange.emit(parameters)">
+        <label for="C1Choice2" class="before-label">Bottom</label>
+    
+        <input type="radio" id="C1Choice3" name="c1" [value]="2" [(ngModel)]="parameters.initialCondition.c1" (change)="parametersChange.emit(parameters)">
+        <label for="C1Choice3" class="before-label">Right</label>
+
+        <input type="radio" id="C1Choice4" name="c1" [value]="3" [(ngModel)]="parameters.initialCondition.c1" (change)="parametersChange.emit(parameters)">
+        <label for="C1Choice4" class="before-label">Top</label>
+      </div>
+      <div class="field-container">
+        <div class="text-field-label">Duration (frames)</div>
+        <input type="text" class="text-field" [(ngModel)]="duration" (focusout)="setDuration()" (keydown.enter)="blur()">
+      </div>
+      <div class="field-container">
+        <div class="text-field-label">Frequency</div>
+        <input type="text" class="text-field" [(ngModel)]="frequency" (focusout)="setFrequency()" (keydown.enter)="blur()">
+      </div>
+      <div class="field-container">
+        <div class="text-field-label">Amplitude</div>
+        <input type="text" class="text-field" [(ngModel)]="amplitude" (focusout)="setAmplitude()" (keydown.enter)="blur()">
       </div>
     </div>
-    <div class="field-container radio-label">Boundary</div>
-    <div class="field-container radio-container">
-      <input type="radio" id="boundaryChoice1" name="boundary" [value]="0" [(ngModel)]="parameters.boundary" (change)="parametersChange.emit(parameters)">
-      <label for="boundaryChoice1" class="before-label">Absorb</label>
+    
+    <!-- Pulse -->
+    <div class="parameters-container" *ngIf="parameters.initialCondition.type == 1">
+      <div class="text-field-label xy-label">Position</div>
+      <div class="labeled-field-container">
+        <span class="before-label">x</span>
+        <input type="text" class="text-field labeled-field" [(ngModel)]="x" (focusout)="setX()" (keydown.enter)="blur()">
+      </div>
+      <div class="labeled-field-container">
+        <span class="before-label">y</span>
+        <input type="text" class="text-field labeled-field" [(ngModel)]="y" (focusout)="setY()" (keydown.enter)="blur()">
+      </div>
+      <div class="field-container">
+        <div class="text-field-label">Amplitude</div>
+        <input type="text" class="text-field" [(ngModel)]="amplitude" (focusout)="setAmplitude()" (keydown.enter)="blur()">
+      </div>
+      <div class="field-container">
+        <div class="text-field-label">Frequency</div>
+        <input type="text" class="text-field" [(ngModel)]="frequency" (focusout)="setFrequency()" (keydown.enter)="blur()">
+      </div>
+    </div>
 
-      <input type="radio" id="boundaryChoice2" name="boundary" [value]="1" [(ngModel)]="parameters.boundary" (change)="parametersChange.emit(parameters)">
-      <label for="boundaryChoice2" class="before-label">Reflect</label>
-
-      <input type="radio" id="boundaryChoice3" name="boundary" [value]="2" [(ngModel)]="parameters.boundary" (change)="parametersChange.emit(parameters)">
-      <label for="boundaryChoice3" class="before-label">Zero</label>
+    <!-- Spherical wave -->
+    <div class="parameters-container" *ngIf="parameters.initialCondition.type == 2">
+      <div class="text-field-label xy-label">Position</div>
+      <div class="labeled-field-container">
+        <span class="before-label">x</span>
+        <input type="text" class="text-field labeled-field" [(ngModel)]="x" (focusout)="setX()" (keydown.enter)="blur()">
+      </div>
+      <div class="labeled-field-container">
+        <span class="before-label">y</span>
+        <input type="text" class="text-field labeled-field" [(ngModel)]="y" (focusout)="setY()" (keydown.enter)="blur()">
+      </div>
+      <div class="field-container">
+        <div class="text-field-label">Duration (frames)</div>
+        <input type="text" class="text-field" [(ngModel)]="duration2" (focusout)="setDuration2()" (keydown.enter)="blur()">
+      </div>
+      <div class="field-container">
+        <div class="text-field-label">Amplitude</div>
+        <input type="text" class="text-field" [(ngModel)]="amplitude" (focusout)="setAmplitude()" (keydown.enter)="blur()">
+      </div>
+      <div class="field-container">
+        <div class="text-field-label">Frequency</div>
+        <input type="text" class="text-field" [(ngModel)]="frequency" (focusout)="setFrequency()" (keydown.enter)="blur()">
+      </div>
     </div>
   </div>
-  <div class="divider field-divider"></div>
 </div>

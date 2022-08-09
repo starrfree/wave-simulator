@@ -14,9 +14,18 @@ export class AppComponent {
     pause: false,
     nextFrame: 0,
     forceAspectRatio: true,
+    showGradient: true,
     LOD: 1,
     energy: false,
-    boundary: 0
+    boundary: 0,
+    initialCondition: {
+      type: 0,
+      c1: 0,
+      c2: 800,
+      c3: 0.7,
+      c4: 0.05,
+    },
+    aCeil: 1
   }
 
   toggleFullScreen(): void {

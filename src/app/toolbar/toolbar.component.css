@@ -22,6 +22,7 @@
   padding: 6px 12px;
   cursor: pointer;
   border-radius: 7px;
+  width: 88px;
 }
 
 input[type="file"] {
@@ -29,12 +30,24 @@ input[type="file"] {
 }
 
 .subtitle {
-  font-weight: 700;
-  color: #888;
-  margin-top: 5px;
+  /* font-weight: 700; */
+  color: #aaa;
   width: 75px;
   overflow: hidden;
-  white-space: nowrap
+  white-space: nowrap;
+  font-size: 12px;
+}
+
+.select-title {
+  margin-top: 5px;
+  overflow: hidden;
+  white-space: nowrap;
+  font-size: 14px;
+  width: 95px;
+}
+
+.after-select {
+  margin-left: 13px;
 }
 
 .after-field {
@@ -199,4 +212,70 @@ input[type="radio"]:checked::before {
   font-weight: 700;
   color:rgb(220, 220, 220);
   text-decoration: none;
+}
+
+::ng-deep .mat-accent .mat-slider-track-fill {
+  background-color: white !important;
+}
+
+::ng-deep .mat-accent .mat-slider-thumb {
+  background-color: white !important;
+}
+
+.range-container {
+  height: 45px;
+  margin-left: -6px;
+  margin-top: 15px;
+}
+
+.range-container label {
+  margin-left: 10px;
+}
+
+.range-label {
+  margin-left: 8px;
+  margin-bottom: -8px;
+}
+
+.parameters-container {
+  margin-top: 3px;
+}
+
+.text-field {
+  font-family: 'Lato', sans-serif;
+  font-weight: 400;
+  background-color: rgb(76, 76, 76);
+  color: white;
+  border: none;
+  border-radius: 4px;
+  padding: 3px;
+  width: 190px;
+  margin-left: -2px;
+}
+
+.text-field-label {
+  margin-bottom: 8px;
+  margin-top: 10px;
+}
+
+#initCond-select {
+  margin-bottom: 10px;
+  color: white;
+  background-color: rgb(76, 76, 76);
+  border: none;
+  border-radius: 4px;
+  padding: 3px;
+}
+
+.labeled-field-container {
+  margin: 5px 0;
+  margin-left: 10px;
+}
+
+.labeled-field {
+  width: 165px;
+}
+
+.xy-label {
+  margin-left: 10px;
 }

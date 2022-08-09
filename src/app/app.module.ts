@@ -6,6 +6,7 @@ import { MatButtonModule } from '@angular/material/button';
 import { MatIconModule } from '@angular/material/icon';
 import { FormsModule } from '@angular/forms';
 import { MatMenuModule } from '@angular/material/menu';
+import { MatSliderModule } from '@angular/material/slider';
 
 import { AppComponent } from './app.component';
 import { SceneCanvasComponent } from './scene-canvas/scene-canvas.component';
@@ -24,7 +25,8 @@ import { ToolbarComponent } from './toolbar/toolbar.component';
     MatButtonModule,
     MatIconModule,
     FormsModule,
-    MatMenuModule
+    MatMenuModule,
+    MatSliderModule
   ],
   providers: [],
   bootstrap: [AppComponent]

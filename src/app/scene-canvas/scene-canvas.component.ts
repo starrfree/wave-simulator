@@ -18,6 +18,14 @@ export class SceneCanvasComponent implements OnInit {
   buffers: any
   textures: any
 
+  get gradientSrc(): string {
+    if (this.parameters.texture && this.parameters.texture.gradient) {
+      return this.parameters.texture.gradient.src
+    } else {
+      return "/assets/images/grad.png"
+    }
+  }
+
   get canvasSize() {
     var height = "100vh"
     var width = ""
@@ -88,6 +96,13 @@ export class SceneCanvasComponent implements OnInit {
           width: gl.getUniformLocation(computeShaderProgram, 'u_Width'),
           height: gl.getUniformLocation(computeShaderProgram, 'u_Height'),
           boundary: gl.getUniformLocation(computeShaderProgram, 'u_Boundary'),
+          initialCondition: gl.getUniformLocation(computeShaderProgram, 'u_InitCondition'),
+          c1: gl.getUniformLocation(computeShaderProgram, 'c1'),
+          c2: gl.getUniformLocation(computeShaderProgram, 'c2'),
+          c3: gl.getUniformLocation(computeShaderProgram, 'c3'),
+          c4: gl.getUniformLocation(computeShaderProgram, 'c4'),
+          c5: gl.getUniformLocation(computeShaderProgram, 'c5'),
+          aCeil: gl.getUniformLocation(computeShaderProgram, 'aCeil'),
           texture: gl.getUniformLocation(computeShaderProgram, 'u_Texture'),
           backgroundTexture: gl.getUniformLocation(computeShaderProgram, 'u_Background_Texture')
         },
@@ -228,6 +243,23 @@ export class SceneCanvasComponent implements OnInit {
       gl.uniform1f(programInfo.uniformLocations.compute.width, gl.canvas.width)
       gl.uniform1f(programInfo.uniformLocations.compute.height, gl.canvas.height)
       gl.uniform1i(programInfo.uniformLocations.compute.boundary, this.parameters.boundary)
+      gl.uniform1i(programInfo.uniformLocations.compute.initialCondition, this.parameters.initialCondition.type)
+      if (this.parameters.initialCondition.c1) {
+        gl.uniform1f(programInfo.uniformLocations.compute.c1, this.parameters.initialCondition.c1)
+      }
+      if (this.parameters.initialCondition.c2) {
+        gl.uniform1f(programInfo.uniformLocations.compute.c2, this.parameters.initialCondition.c2)
+      }
+      if (this.parameters.initialCondition.c3) {
+        gl.uniform1f(programInfo.uniformLocations.compute.c3, this.parameters.initialCondition.c3)
+      }
+      if (this.parameters.initialCondition.c4) {
+        gl.uniform1f(programInfo.uniformLocations.compute.c4, this.parameters.initialCondition.c4)
+      }
+      if (this.parameters.initialCondition.c5) {
+        gl.uniform1f(programInfo.uniformLocations.compute.c5, this.parameters.initialCondition.c5)
+      }
+      gl.uniform1f(programInfo.uniformLocations.compute.aCeil, this.parameters.aCeil)
       gl.uniform1i(programInfo.uniformLocations.compute.texture, 0);
       gl.uniform1i(programInfo.uniformLocations.compute.backgroundTexture, 1);
       {
@@ -295,7 +327,7 @@ export class SceneCanvasComponent implements OnInit {
       gl.activeTexture(gl.TEXTURE2);
       var gradientTexture = this.textures.gradient
       if (this.parameters.texture && this.parameters.texture.gradient) {
-        gradientTexture = this.parameters.texture.gradient
+        gradientTexture = this.parameters.texture.gradient.texture
       }
       gl.bindTexture(gl.TEXTURE_2D, gradientTexture);
       gl.drawArrays(gl.TRIANGLE_STRIP, 0, 4)

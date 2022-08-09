@@ -1,0 +1,13 @@
+.gradient-image {
+  width: calc(min(10px, 5%));
+  height: calc(min(200px, 40%));
+  z-index: 1000;
+  position: absolute;
+  right: 0;
+  bottom: 0;
+}
+
+.container {
+  position: relative;
+  transition: 310ms width ease-in-out; transition: 310ms left ease-in-out;
+}
