@@ -8,9 +8,8 @@ import { SceneCanvasComponent } from './scene-canvas/scene-canvas.component';
 })
 export class AppComponent {
   @ViewChild(SceneCanvasComponent) sceneComponent!: SceneCanvasComponent;
-  title = 'wave-simulation';
   fullScreen: boolean = false
-  parameters: any = {
+  defaultParameters: SimulationParameters = {
     pause: false,
     nextFrame: 0,
     forceAspectRatio: true,
@@ -25,8 +24,10 @@ export class AppComponent {
       c3: 0.7,
       c4: 0.05,
     },
-    aCeil: 1
+    aCeil: 1,
+    speedMultiplier: 1
   }
+  parameters = this.defaultParameters
 
   toggleFullScreen(): void {
     this.fullScreen = !this.fullScreen
@@ -34,6 +35,14 @@ export class AppComponent {
   }
 
   initialize() {
-    this.sceneComponent.initialize()
+    if (this.sceneComponent) {
+      this.sceneComponent.initialize()
+    }
+  }
+
+  resetParameters() {
+    this.parameters = this.defaultParameters
+    localStorage.removeItem("parameters")
+    this.initialize()
   }
 }

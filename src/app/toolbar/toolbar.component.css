@@ -1,5 +1,19 @@
 .container {
   width: 250px;
+  position: relative;
+}
+
+.reset-parameters-button {
+  font-size: 12px;
+  font-weight: 300;
+  /* margin-left: 10px; */
+  /* position: relative; */
+  /* left: 50px; */
+  /* background-color: #333; */
+}
+
+.reset-menu-parameters {
+  margin-left: 20px;
 }
 
 .field-container {
@@ -14,6 +28,20 @@
 .small-field-group {
   margin-top: -5px;
   margin-bottom: 10px;
+}
+
+.top-container {
+  width: 270px;
+  background-color: #222;
+  position: sticky;
+  top: 0;
+  padding-top: 20px;
+  z-index: 1000;
+  border-bottom: 1px solid rgb(76, 76, 76);
+}
+
+.first-field {
+  padding-top: 10px;
 }
 
 .file-select {
@@ -204,7 +232,7 @@ input[type="radio"]:checked::before {
 }
 
 .title {
-  padding: 20px 0 20px 20px;
+  padding: 0 0 20px 20px;
 }
 
 .title-a {

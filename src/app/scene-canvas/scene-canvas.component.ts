@@ -60,6 +60,11 @@ export class SceneCanvasComponent implements OnInit {
       this.main()
     }
     this.didInit = true
+
+    var canvas = this.canvas.nativeElement;
+    canvas.addEventListener('contextmenu', (ev: any) => {
+      ev.preventDefault();
+    });
   }
 
   public initialize = () => {
@@ -103,8 +108,10 @@ export class SceneCanvasComponent implements OnInit {
           c4: gl.getUniformLocation(computeShaderProgram, 'c4'),
           c5: gl.getUniformLocation(computeShaderProgram, 'c5'),
           aCeil: gl.getUniformLocation(computeShaderProgram, 'aCeil'),
+          speedMultiplier: gl.getUniformLocation(computeShaderProgram, 'u_SpeedMultiplier'),
           texture: gl.getUniformLocation(computeShaderProgram, 'u_Texture'),
-          backgroundTexture: gl.getUniformLocation(computeShaderProgram, 'u_Background_Texture')
+          backgroundTexture: gl.getUniformLocation(computeShaderProgram, 'u_Background_Texture'),
+          LOD: gl.getUniformLocation(computeShaderProgram, 'u_LOD'),
         },
         render: {
           step: gl.getUniformLocation(renderShaderProgram, 'u_Step'),
@@ -133,7 +140,13 @@ export class SceneCanvasComponent implements OnInit {
         this.main()
       } else {
         if (!this.parameters.pause || this.parameters.nextFrame > 0) {
-          this.drawScene(gl, programInfo, 3);
+          // var n = 3
+          // if (this.parameters.LOD == 2) {
+          //   n = 2
+          // } else if (this.parameters.LOD > 2) {
+          //   n = 1
+          // }
+          this.drawScene(gl, programInfo, 3); // * this.parameters.speedMultiplier
           if (this.parameters.nextFrame > 0) {
             this.parameters.nextFrame--
           }
@@ -260,8 +273,10 @@ export class SceneCanvasComponent implements OnInit {
         gl.uniform1f(programInfo.uniformLocations.compute.c5, this.parameters.initialCondition.c5)
       }
       gl.uniform1f(programInfo.uniformLocations.compute.aCeil, this.parameters.aCeil)
+      gl.uniform1f(programInfo.uniformLocations.compute.speedMultiplier, this.parameters.speedMultiplier)
       gl.uniform1i(programInfo.uniformLocations.compute.texture, 0);
       gl.uniform1i(programInfo.uniformLocations.compute.backgroundTexture, 1);
+      gl.uniform1f(programInfo.uniformLocations.compute.LOD, this.parameters.LOD)
       {
         const numComponents = 2
         const type = gl.FLOAT

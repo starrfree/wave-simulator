@@ -1,22 +1,24 @@
 <div class="container">
-  <div class="title">
-    <a href="/" class="title-a">Wave Simulator</a>
-  </div>
-  <!-- <div class="divider field-divider"></div> -->
-  <div class="small-field-group">
-    <div class="field-container">
-      <button mat-icon-button aria-label="play" (click)="togglePause()">
-        <mat-icon>{{parameters.pause ? 'play_arrow' : 'pause'}}</mat-icon>
-      </button>
-      <button mat-icon-button aria-label="next" (click)="nextFrame()">
-        <mat-icon>skip_next</mat-icon>
-      </button>
-      <button mat-icon-button aria-label="restart" (click)="reset()">
-        <mat-icon>restart_alt</mat-icon>
-      </button>
+  <div class="top-container">
+    <div class="title">
+      <a href="/" class="title-a">Wave Simulator</a>
+    </div>
+    <!-- <div class="divider field-divider"></div> -->
+    <div class="small-field-group">
+      <div class="field-container">
+        <button mat-icon-button aria-label="play" (click)="togglePause()">
+          <mat-icon>{{parameters.pause ? 'play_arrow' : 'pause'}}</mat-icon>
+        </button>
+        <button mat-icon-button aria-label="next" (click)="nextFrame()">
+          <mat-icon>skip_next</mat-icon>
+        </button>
+        <button mat-icon-button aria-label="restart" (click)="reset()">
+          <mat-icon>restart_alt</mat-icon>
+        </button>
+      </div>
     </div>
   </div>
-  <div class="divider field-divider"></div>
+  <div class="first-field"></div>
   <div class="field-group">
     <div class="field-container">
       <div class="file-selects-container">
@@ -72,32 +74,37 @@
     <div class="field-group">
     <div class="field-container checkbox-field">
       <div class="checkbox-container">
-        <input #energy type="checkbox" (click)="toggleEnergy()">
+        <input #energy type="checkbox" (click)="toggleEnergy()" [ngModel]="parameters.energy">
         <label for="energy" class="after-label">Average energy</label>
       </div>
     </div>
     <div class="field-container radio-label">Boundary conditions</div>
     <div class="field-container radio-container">
-      <input type="radio" id="boundaryChoice1" name="boundary" [value]="0" [(ngModel)]="parameters.boundary" (change)="parametersChange.emit(parameters)">
+      <input type="radio" id="boundaryChoice1" name="boundary" [value]="0" [(ngModel)]="parameters.boundary" (change)="parametersChange.emit(parameters); saveParameter()">
       <label for="boundaryChoice1" class="before-label">Absorb</label>
 
-      <input type="radio" id="boundaryChoice2" name="boundary" [value]="1" [(ngModel)]="parameters.boundary" (change)="parametersChange.emit(parameters)">
+      <input type="radio" id="boundaryChoice2" name="boundary" [value]="1" [(ngModel)]="parameters.boundary" (change)="parametersChange.emit(parameters); saveParameter()">
       <label for="boundaryChoice2" class="before-label">Reflect</label>
 
-      <input type="radio" id="boundaryChoice3" name="boundary" [value]="2" [(ngModel)]="parameters.boundary" (change)="parametersChange.emit(parameters)">
+      <input type="radio" id="boundaryChoice3" name="boundary" [value]="2" [(ngModel)]="parameters.boundary" (change)="parametersChange.emit(parameters); saveParameter()">
       <label for="boundaryChoice3" class="before-label">Zero</label>
     </div>
     <div class="field-container range-container">
       <div class="range-label">Alpha threshold</div>
-      <mat-slider id="aCeilRange" continuous min="0" max="1" step="0.05" [value]="parameters.aCeil" (input)="parameters.aCeil = $event.value"></mat-slider>
+      <mat-slider id="aCeilRange" continuous min="0" max="1" step="0.05" [value]="parameters.aCeil" (input)="parameters.aCeil = $event.value" (change)="saveParameter()"></mat-slider>
       <label for="aCeilRange">{{parameters.aCeil | number : '1.2-2'}}</label>
     </div>
+    <!-- <div class="field-container range-container">
+      <div class="range-label">Speed multiplier</div>
+      <mat-slider id="speedMultSlider" continuous min="0" max="1" step="{{1/3}}" [value]="parameters.speedMultiplier" (input)="parameters.speedMultiplier = $event.value"></mat-slider>
+      <label for="speedMultSlider">{{parameters.speedMultiplier | number : '1.2-2'}}</label>
+    </div> -->
   </div>
   <div class="divider field-divider"></div>
   <div class="field-group">
     <div class="field-container checkbox-field">
       <div class="checkbox-container">
-        <input #forceAspectRatio type="checkbox" [ngModel]="parameters.forceAspectRatio" (ngModelChange)="parameters.forceAspectRatio = $event; parametersChange.emit(parameters)">
+        <input #forceAspectRatio type="checkbox" [ngModel]="parameters.forceAspectRatio" (ngModelChange)="parameters.forceAspectRatio = $event; parametersChange.emit(parameters); saveParameter()">
         <label for="forceAspectRatio" class="after-label">Keep aspect ratio</label>
       </div>
     </div>
@@ -109,13 +116,13 @@
     </div>
     <div class="radio-label field-container">Level of detail</div>
     <div class="field-container radio-container">
-      <input type="radio" id="LODChoice1" name="LOD" [value]="1" [(ngModel)]="parameters.LOD" (change)="parametersChange.emit(parameters)">
+      <input type="radio" id="LODChoice1" name="LOD" [value]="1" [(ngModel)]="parameters.LOD" (change)="parametersChange.emit(parameters); saveParameter()">
       <label for="LODChoice1" class="before-label">High</label>
 
-      <input type="radio" id="LODChoice2" name="LOD" [value]="2" [(ngModel)]="parameters.LOD" (change)="parametersChange.emit(parameters)">
+      <input type="radio" id="LODChoice2" name="LOD" [value]="2" [(ngModel)]="parameters.LOD" (change)="parametersChange.emit(parameters); saveParameter()">
       <label for="LODChoice2" class="before-label">Medium</label>
   
-      <input type="radio" id="LODChoice3" name="LOD" [value]="2.8" [(ngModel)]="parameters.LOD" (change)="parametersChange.emit(parameters)">
+      <input type="radio" id="LODChoice3" name="LOD" [value]="2.8" [(ngModel)]="parameters.LOD" (change)="parametersChange.emit(parameters); saveParameter()">
       <label for="LODChoice3" class="before-label">Low</label>
     </div>
   </div>
@@ -134,16 +141,16 @@
     <div class="parameters-container" *ngIf="parameters.initialCondition.type == 0">
       <div class="radio-label field-container">Direction</div>
       <div class="field-container radio-container">
-        <input type="radio" id="C1Choice1" name="c1" [value]="0" [(ngModel)]="parameters.initialCondition.c1" (change)="parametersChange.emit(parameters)">
+        <input type="radio" id="C1Choice1" name="c1" [value]="0" [(ngModel)]="parameters.initialCondition.c1" (change)="parametersChange.emit(parameters); saveParameter()">
         <label for="C1Choice1" class="before-label">Left</label>
 
-        <input type="radio" id="C1Choice2" name="c1" [value]="1" [(ngModel)]="parameters.initialCondition.c1" (change)="parametersChange.emit(parameters)">
+        <input type="radio" id="C1Choice2" name="c1" [value]="1" [(ngModel)]="parameters.initialCondition.c1" (change)="parametersChange.emit(parameters); saveParameter()">
         <label for="C1Choice2" class="before-label">Bottom</label>
     
-        <input type="radio" id="C1Choice3" name="c1" [value]="2" [(ngModel)]="parameters.initialCondition.c1" (change)="parametersChange.emit(parameters)">
+        <input type="radio" id="C1Choice3" name="c1" [value]="2" [(ngModel)]="parameters.initialCondition.c1" (change)="parametersChange.emit(parameters); saveParameter()">
         <label for="C1Choice3" class="before-label">Right</label>
 
-        <input type="radio" id="C1Choice4" name="c1" [value]="3" [(ngModel)]="parameters.initialCondition.c1" (change)="parametersChange.emit(parameters)">
+        <input type="radio" id="C1Choice4" name="c1" [value]="3" [(ngModel)]="parameters.initialCondition.c1" (change)="parametersChange.emit(parameters); saveParameter()">
         <label for="C1Choice4" class="before-label">Top</label>
       </div>
       <div class="field-container">
@@ -206,4 +213,7 @@
       </div>
     </div>
   </div>
+  <button mat-button aria-label="reset parameters" class="reset-parameters-button" (click)="resetParameter()">
+    reset parameters to default
+  </button>
 </div>

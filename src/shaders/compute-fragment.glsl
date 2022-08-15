@@ -12,8 +12,10 @@ uniform float c3;
 uniform float c4;
 uniform float c5;
 uniform float aCeil;
+uniform float u_SpeedMultiplier;
 uniform sampler2D u_Texture;
 uniform sampler2D u_Background_Texture;
+uniform float u_LOD;
 
 out vec4 o_FragColor;
 
@@ -50,10 +52,10 @@ void main() {
       } else if (int(c1) == 3) {
         pos = readId.y > u_Height - 2.0;
       }
-      isInitCondition = pos && u_Step <= int(c2);
+      isInitCondition = pos && u_Step <= int(c2 / u_LOD);
       if (isInitCondition) {
-        float v = c3 * cos(float(u_Step) * c4);
-        if (u_Step >= int(c2) - 2) {
+        float v = c3 * cos(float(u_Step) * c4 * u_LOD);
+        if (u_Step >= int(c2 / u_LOD) - 2) {
           v = 0.0;
         }
         o_FragColor = vec4(v, v, 0.0, 1.0);
@@ -63,16 +65,16 @@ void main() {
       isInitCondition = u_Step == 0;
       if (isInitCondition) {
         vec2 x = readId - vec2(c1, c2) * vec2(u_Width, u_Height);
-        float v = c3 * exp(-0.001 * c4 * length(x) * length(x));
+        float v = c3 * exp(-0.001 * c4 * u_LOD * length(x) * length(x));
         o_FragColor = vec4(v, v, 0.0, 1.0);
       }
       break;
     case 2:
       vec2 x = readId - vec2(c1, c2) * vec2(u_Width, u_Height);
-      isInitCondition = length(x) < 1.0 && u_Step <= int(c5);
+      isInitCondition = length(x) < 1.0 && u_Step <= int(c5 / u_LOD);
       if (isInitCondition) {
-        float v = c3 * cos(float(u_Step) * c4);
-        if (u_Step >= int(c5) - 2) {
+        float v = c3 * cos(float(u_Step) * c4 * u_LOD);
+        if (u_Step >= int(c5 / u_LOD) - 2) {
           v = 0.0;
         }
         o_FragColor = vec4(v, v, 0.0, 1.0);

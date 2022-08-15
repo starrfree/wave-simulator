@@ -9,6 +9,7 @@ import { ShaderService } from '../shader.service';
 export class ToolbarComponent implements OnInit {
   @Input() parameters: any = {}
   @Output() parametersChange = new EventEmitter<any>()
+  @Output() resetParameters = new EventEmitter<any>()
 
   defaultGradientName = "Blue White Red"
   defaultBackgroundName = "Lens"
@@ -26,6 +27,7 @@ export class ToolbarComponent implements OnInit {
       if (this.parameters.initialCondition.c4 != x) {
         this.parameters.initialCondition.c4 = x;
         this.parametersChange.emit(this.parameters)
+        this.saveParameter()
       }
     }
   }
@@ -37,6 +39,7 @@ export class ToolbarComponent implements OnInit {
       if (this.parameters.initialCondition.c2 != x) {
         this.parameters.initialCondition.c2 = x;
         this.parametersChange.emit(this.parameters)
+        this.saveParameter()
       }
     }
   }
@@ -48,6 +51,7 @@ export class ToolbarComponent implements OnInit {
       if (this.parameters.initialCondition.c5 != x) {
         this.parameters.initialCondition.c5 = x;
         this.parametersChange.emit(this.parameters)
+        this.saveParameter()
       }
     }
   }
@@ -59,6 +63,7 @@ export class ToolbarComponent implements OnInit {
       if (this.parameters.initialCondition.c3 != x) {
         this.parameters.initialCondition.c3 = x;
         this.parametersChange.emit(this.parameters)
+        this.saveParameter()
       }
     }
   }
@@ -70,6 +75,7 @@ export class ToolbarComponent implements OnInit {
       if (this.parameters.initialCondition.c1 != x) {
         this.parameters.initialCondition.c1 = x;
         this.parametersChange.emit(this.parameters)
+        this.saveParameter()
       }
     }
   }
@@ -81,6 +87,7 @@ export class ToolbarComponent implements OnInit {
       if (this.parameters.initialCondition.c2 != x) {
         this.parameters.initialCondition.c2 = x;
         this.parametersChange.emit(this.parameters)
+        this.saveParameter()
       }
     }
   }
@@ -88,7 +95,46 @@ export class ToolbarComponent implements OnInit {
   constructor(private shaderService: ShaderService) { }
 
   ngOnInit(): void {
-    this.initInitialConditionsParams()
+    // localStorage.removeItem("parameters")
+    this.loadParameter()
+
+  }
+
+  saveParameter() {
+    localStorage.setItem("parameters", JSON.stringify(this.parameters))
+  }
+
+  resetParameter() {
+    if (confirm("Reset parameters to default?\nThis action cannot be undone.") == true) {
+      this.resetParameters.emit(true)
+    }
+  }
+
+  loadParameter() {
+    const params = localStorage.getItem("parameters")
+    if (params) {
+      this.shaderService.onInit.subscribe(() => {
+        const parameters: SimulationParameters = JSON.parse(params) // `{"pause":"false","nextFrame":0,"forceAspectRatio":true,"showGradient":true,"LOD":1,"energy":false,"boundary":0,"initialCondition":{"type":0,"c1":0,"c2":800,"c3":0.7,"c4":0.05},"aCeil":1,"speedMultiplier":1}`
+        // parameters.test = {
+        //   string: "string",
+        //   number: 123.4,
+        //   boolean: true
+        // }
+        this.parameters = parameters
+        if (parameters.texture) {
+          if (parameters.texture.gradient) {
+            this.setGradientTexture(parameters.texture.gradient.src, parameters.texture.gradient.name)
+          }
+          if (parameters.texture.background) {
+            this.setBackgroundTexture(parameters.texture.background.src, parameters.texture.background.name, true)
+          }
+        }
+        // this.parametersChange.emit(parameters)
+        this.initInitialConditionsParams()
+      })
+    } else {
+      this.initInitialConditionsParams()
+    }
   }
 
   initInitialConditionsParams() {
@@ -98,6 +144,13 @@ export class ToolbarComponent implements OnInit {
     this.x = `${this.parameters.initialCondition.c1}`
     this.y = `${this.parameters.initialCondition.c2}`
     this.duration2 = `${this.parameters.initialCondition.c5}`
+
+    this.setFrequency()
+    this.setDuration()
+    this.setAmplitude()
+    this.setX()
+    this.setY()
+    this.setDuration2()
   }
 
   blur() {
@@ -111,10 +164,10 @@ export class ToolbarComponent implements OnInit {
     this.gradientName = this.defaultGradientName
     delete this.parameters.texture.gradient
     this.parameters.nextFrame++
+    this.saveParameter()
   }
 
   selectGradient(input: any) {
-    console.log(input.files)
     if (input.files && input.files[0]) {
       this.setGradient(input.files[0])
     }
@@ -155,17 +208,20 @@ export class ToolbarComponent implements OnInit {
       if (this.parameters.texture) {
         this.parameters.texture.gradient = {
           texture: texture,
-          src: src
+          src: src,
+          name: name
         }
       } else {
         this.parameters.texture = {
           gradient: {
             texture: texture,
-            src: src
+            src: src,
+            name: name
           }
         }
       }
       this.parameters.nextFrame++
+      this.saveParameter()
     })
   }
 
@@ -175,6 +231,7 @@ export class ToolbarComponent implements OnInit {
       delete this.parameters.texture.background
       this.parametersChange.emit(this.parameters)
     }
+    this.saveParameter()
   }
 
   selectBackground(input: any) {
@@ -212,25 +269,32 @@ export class ToolbarComponent implements OnInit {
     }
   }
 
-  setBackgroundTexture(src: string, name: string) {
+  setBackgroundTexture(src: string, name: string, reset: boolean = true) {
     this.backgroundName = name
     this.shaderService.imageToTexture(this.shaderService.gl, src, (texture, w, h) => {
       if (this.parameters.texture) {
         this.parameters.texture.background = {
           texture: texture,
           width: w,
-          height: h
+          height: h,
+          src: src,
+          name: name
         }
       } else {
         this.parameters.texture = {
           background: {
             texture: texture,
             width: w,
-            height: h
+            height: h,
+            src: src,
+            name: name
           },
         }
       }
-      this.parametersChange.emit(this.parameters)
+      if (reset) {
+        this.parametersChange.emit(this.parameters)
+        this.saveParameter()
+      }
     })
   }
 
@@ -261,6 +325,7 @@ export class ToolbarComponent implements OnInit {
   toggleEnergy() {
     this.parameters.energy = !this.parameters.energy
     this.parameters.nextFrame++
+    this.saveParameter()
   }
 
   setInitialCondition(event: any) {
@@ -299,5 +364,6 @@ export class ToolbarComponent implements OnInit {
           break;
       }
     }
+    this.saveParameter()
   }
 }
