@@ -307,3 +307,7 @@ input[type="radio"]:checked::before {
 .xy-label {
   margin-left: 10px;
 }
+
+.space-above {
+  margin-top: 10px;
+}

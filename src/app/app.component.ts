@@ -25,7 +25,8 @@ export class AppComponent {
       c4: 0.05,
     },
     aCeil: 1,
-    speedMultiplier: 1
+    speedMultiplier: 1,
+    speedDivider: 1
   }
   parameters = this.defaultParameters
 

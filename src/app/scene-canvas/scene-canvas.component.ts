@@ -134,12 +134,13 @@ export class SceneCanvasComponent implements OnInit {
     }
 
     this.step = 0
+    var renders = 0
     var render = (time: number) => {
       if (this.reset) {
         this.reset = false
         this.main()
       } else {
-        if (!this.parameters.pause || this.parameters.nextFrame > 0) {
+        if ((!this.parameters.pause && renders % this.parameters.speedDivider == 0) || this.parameters.nextFrame > 0) {
           // var n = 3
           // if (this.parameters.LOD == 2) {
           //   n = 2
@@ -153,6 +154,7 @@ export class SceneCanvasComponent implements OnInit {
         }
         requestAnimationFrame(render);
       }
+      renders++
     }
     requestAnimationFrame(render)
 

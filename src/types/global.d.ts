@@ -17,7 +17,8 @@ declare global {
       c4: number,
     },
     aCeil: number,
-    speedMultiplier: number
+    speedMultiplier: number,
+    speedDivider: number
     texture?: {
       gradient?: {
         texture: WebGLTexture,

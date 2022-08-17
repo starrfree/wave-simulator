@@ -125,6 +125,17 @@
       <input type="radio" id="LODChoice3" name="LOD" [value]="2.8" [(ngModel)]="parameters.LOD" (change)="parametersChange.emit(parameters); saveParameter()">
       <label for="LODChoice3" class="before-label">Low</label>
     </div>
+    <div class="radio-label field-container space-above">Speed</div>
+    <div class="field-container radio-container">
+      <input type="radio" id="speedDividerChoice1" name="speedDivider" [value]="1" [(ngModel)]="parameters.speedDivider" (change)="saveParameter()">
+      <label for="speedDividerChoice1" class="before-label">Max</label>
+
+      <input type="radio" id="speedDividerChoice2" name="speedDivider" [value]="3" [(ngModel)]="parameters.speedDivider" (change)="saveParameter()">
+      <label for="speedDividerChoice2" class="before-label">Medium</label>
+  
+      <input type="radio" id="speedDividerChoice3" name="speedDivider" [value]="8" [(ngModel)]="parameters.speedDivider" (change)="saveParameter()">
+      <label for="LODChoice3" class="before-label">Slow</label>
+    </div>
   </div>
   <div class="divider field-divider"></div>
   <div class="field-group">
@@ -213,6 +224,7 @@
       </div>
     </div>
   </div>
+  <div class="divider field-divider"></div>
   <button mat-button aria-label="reset parameters" class="reset-parameters-button" (click)="resetParameter()">
     reset parameters to default
   </button>
