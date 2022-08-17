@@ -229,6 +229,17 @@
 
      <!-- Interactive Pulse -->
     <div class="parameters-container" *ngIf="parameters.initialCondition.type == 3">
+      <div class="radio-label field-container">Shape</div>
+      <div class="field-container radio-container">
+        <input type="radio" id="C5Choice1" name="c5" [value]="0" [(ngModel)]="parameters.initialCondition.c5" (change)="saveParameter()">
+        <label for="C5Choice1" class="before-label">Circular</label>
+
+        <input type="radio" id="C5Choice2" name="c5" [value]="1" [(ngModel)]="parameters.initialCondition.c5" (change)="saveParameter()">
+        <label for="C5Choice2" class="before-label">Vertical</label>
+    
+        <input type="radio" id="C5Choice3" name="c5" [value]="2" [(ngModel)]="parameters.initialCondition.c5" (change)="saveParameter()">
+        <label for="C5Choice3" class="before-label">Horizontal</label>
+      </div>
       <div class="field-container">
         <div class="text-field-label">Amplitude</div>
         <input type="text" class="text-field" [(ngModel)]="amplitude" (focusout)="setAmplitude()" (keydown.enter)="blur()">

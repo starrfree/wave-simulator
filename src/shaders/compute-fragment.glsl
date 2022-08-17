@@ -150,8 +150,21 @@ void main() {
 
     float offsetValue = 0.0;
     if (u_InitCondition == 3 && u_touchIsActive) {
-      vec2 x = readId - vec2(c1, c2) * vec2(u_Width, u_Height);
-      offsetValue = c3 * exp(-0.001 * c4 * u_LOD * length(x) * length(x));
+      vec2 x;
+      if (int(c5) == 0) {
+        x = readId - vec2(c1, c2) * vec2(u_Width, u_Height);
+      } else if (int(c5) == 1) {
+        x = vec2(readId.x - c1 * u_Width, 0.0);
+      } else if (int(c5) == 2) {
+        x = vec2(0.0, readId.y - c2 * u_Height);
+      } else {
+        x = vec2(0.0, 0.0);
+      }
+      float l = length(x);
+      offsetValue = c3 * exp(-0.001 * c4 * u_LOD * l*l);
+      if (int(c5) == 1 || int(c5) == 2) {
+        offsetValue = offsetValue / 5.0;
+      }
     }
     newValue = newValue + offsetValue;
     o_FragColor = vec4(newValue, middle.x + offsetValue, middle.z + newValue * newValue, 1.0);

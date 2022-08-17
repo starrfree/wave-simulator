@@ -66,7 +66,7 @@ export class SceneCanvasComponent implements OnInit {
     this.didInit = true
 
     var canvas = this.canvas.nativeElement;
-    canvas.addEventListener('pointerdown', (event: any) => {
+    canvas.addEventListener('pointerup', (event: any) => {
       this.touch.active = true
       this.touch.position = [event.offsetX / canvas.clientWidth, 1 - event.offsetY / canvas.clientHeight]
     }, false)
@@ -269,19 +269,19 @@ export class SceneCanvasComponent implements OnInit {
       gl.uniform1f(programInfo.uniformLocations.compute.height, gl.canvas.height)
       gl.uniform1i(programInfo.uniformLocations.compute.boundary, this.parameters.boundary)
       gl.uniform1i(programInfo.uniformLocations.compute.initialCondition, this.parameters.initialCondition.type)
-      if (this.parameters.initialCondition.c1) {
+      if (this.parameters.initialCondition.c1 != undefined) {
         gl.uniform1f(programInfo.uniformLocations.compute.c1, this.parameters.initialCondition.c1)
       }
-      if (this.parameters.initialCondition.c2) {
+      if (this.parameters.initialCondition.c2 != undefined) {
         gl.uniform1f(programInfo.uniformLocations.compute.c2, this.parameters.initialCondition.c2)
       }
-      if (this.parameters.initialCondition.c3) {
+      if (this.parameters.initialCondition.c3 != undefined) {
         gl.uniform1f(programInfo.uniformLocations.compute.c3, this.parameters.initialCondition.c3)
       }
-      if (this.parameters.initialCondition.c4) {
+      if (this.parameters.initialCondition.c4 != undefined) {
         gl.uniform1f(programInfo.uniformLocations.compute.c4, this.parameters.initialCondition.c4)
       }
-      if (this.parameters.initialCondition.c5) {
+      if (this.parameters.initialCondition.c5 != undefined) {
         gl.uniform1f(programInfo.uniformLocations.compute.c5, this.parameters.initialCondition.c5)
       }
       if (this.parameters.initialCondition.type == 3) {

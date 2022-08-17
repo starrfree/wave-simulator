@@ -368,7 +368,8 @@ export class ToolbarComponent implements OnInit {
             c1: 0,
             c2: 0,
             c3: 10,
-            c4: 1
+            c4: 1,
+            c5: 0
           }
           this.parametersChange.emit(this.parameters)
           break;
