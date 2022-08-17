@@ -16,6 +16,7 @@ uniform float u_SpeedMultiplier;
 uniform sampler2D u_Texture;
 uniform sampler2D u_Background_Texture;
 uniform float u_LOD;
+uniform bool u_touchIsActive;
 
 out vec4 o_FragColor;
 
@@ -147,6 +148,12 @@ void main() {
     // wave equation
     float newValue = c*c * (dfx / (dx * dx) + dfy / (dy * dy)) * dt*dt + 2.0 * middle.x - middle.y;
 
-    o_FragColor = vec4(newValue, middle.x, middle.z + newValue * newValue, 1.0);
+    float offsetValue = 0.0;
+    if (u_InitCondition == 3 && u_touchIsActive) {
+      vec2 x = readId - vec2(c1, c2) * vec2(u_Width, u_Height);
+      offsetValue = c3 * exp(-0.001 * c4 * u_LOD * length(x) * length(x));
+    }
+    newValue = newValue + offsetValue;
+    o_FragColor = vec4(newValue, middle.x + offsetValue, middle.z + newValue * newValue, 1.0);
   }
 }

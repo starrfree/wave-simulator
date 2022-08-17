@@ -362,6 +362,16 @@ export class ToolbarComponent implements OnInit {
           }
           this.parametersChange.emit(this.parameters)
           break;
+        case 3:
+          this.parameters.initialCondition = {
+            type: 3,
+            c1: 0,
+            c2: 0,
+            c3: 10,
+            c4: 1
+          }
+          this.parametersChange.emit(this.parameters)
+          break;
       }
     }
     this.saveParameter()

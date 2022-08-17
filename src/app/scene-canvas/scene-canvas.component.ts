@@ -17,6 +17,10 @@ export class SceneCanvasComponent implements OnInit {
   didInit: boolean = false
   buffers: any
   textures: any
+  touch = {
+    active: false,
+    position: [0, 0]
+  }
 
   get gradientSrc(): string {
     if (this.parameters.texture && this.parameters.texture.gradient) {
@@ -62,6 +66,10 @@ export class SceneCanvasComponent implements OnInit {
     this.didInit = true
 
     var canvas = this.canvas.nativeElement;
+    canvas.addEventListener('pointerdown', (event: any) => {
+      this.touch.active = true
+      this.touch.position = [event.offsetX / canvas.clientWidth, 1 - event.offsetY / canvas.clientHeight]
+    }, false)
     canvas.addEventListener('contextmenu', (ev: any) => {
       ev.preventDefault();
     });
@@ -112,6 +120,7 @@ export class SceneCanvasComponent implements OnInit {
           texture: gl.getUniformLocation(computeShaderProgram, 'u_Texture'),
           backgroundTexture: gl.getUniformLocation(computeShaderProgram, 'u_Background_Texture'),
           LOD: gl.getUniformLocation(computeShaderProgram, 'u_LOD'),
+          touchIsActive: gl.getUniformLocation(computeShaderProgram, 'u_touchIsActive'),
         },
         render: {
           step: gl.getUniformLocation(renderShaderProgram, 'u_Step'),
@@ -184,6 +193,7 @@ export class SceneCanvasComponent implements OnInit {
       this.parameters.pause = false
       this.drawScene(gl, programInfo)
     }
+    window.removeEventListener('resize', () => {})
     window.addEventListener('resize', resizeCanvas, false)
     resizeCanvas()
   }
@@ -274,6 +284,11 @@ export class SceneCanvasComponent implements OnInit {
       if (this.parameters.initialCondition.c5) {
         gl.uniform1f(programInfo.uniformLocations.compute.c5, this.parameters.initialCondition.c5)
       }
+      if (this.parameters.initialCondition.type == 3) {
+        gl.uniform1f(programInfo.uniformLocations.compute.touchIsActive, this.touch.active ? 1 : 0)
+        gl.uniform1f(programInfo.uniformLocations.compute.c1, this.touch.position[0])
+        gl.uniform1f(programInfo.uniformLocations.compute.c2, this.touch.position[1])
+      }
       gl.uniform1f(programInfo.uniformLocations.compute.aCeil, this.parameters.aCeil)
       gl.uniform1f(programInfo.uniformLocations.compute.speedMultiplier, this.parameters.speedMultiplier)
       gl.uniform1i(programInfo.uniformLocations.compute.texture, 0);
@@ -351,6 +366,7 @@ export class SceneCanvasComponent implements OnInit {
 
       this.textureOffset += 1
       this.step += 1
+      this.touch.active = false
     }
   } 
 }

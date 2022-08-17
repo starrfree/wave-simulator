@@ -147,6 +147,7 @@
         <option [value]="0">Plane Wave</option>
         <option [value]="1">Pulse</option>
         <option [value]="2">Spherical wave</option>
+        <option [value]="3">Interactive Pulse</option>
       </select>    
     </div>
     
@@ -216,6 +217,18 @@
         <div class="text-field-label">Duration (frames)</div>
         <input type="text" class="text-field" [(ngModel)]="duration2" (focusout)="setDuration2()" (keydown.enter)="blur()">
       </div>
+      <div class="field-container">
+        <div class="text-field-label">Amplitude</div>
+        <input type="text" class="text-field" [(ngModel)]="amplitude" (focusout)="setAmplitude()" (keydown.enter)="blur()">
+      </div>
+      <div class="field-container">
+        <div class="text-field-label">Frequency</div>
+        <input type="text" class="text-field" [(ngModel)]="frequency" (focusout)="setFrequency()" (keydown.enter)="blur()">
+      </div>
+    </div>
+
+     <!-- Interactive Pulse -->
+    <div class="parameters-container" *ngIf="parameters.initialCondition.type == 3">
       <div class="field-container">
         <div class="text-field-label">Amplitude</div>
         <input type="text" class="text-field" [(ngModel)]="amplitude" (focusout)="setAmplitude()" (keydown.enter)="blur()">
