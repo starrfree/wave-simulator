@@ -65,8 +65,20 @@ void main() {
     case 1:
       isInitCondition = u_Step == 0;
       if (isInitCondition) {
-        vec2 x = readId - vec2(c1, c2) * vec2(u_Width, u_Height);
+        vec2 x;
+        if (int(c5) == 0) {
+          x = readId - vec2(c1, c2) * vec2(u_Width, u_Height);
+        } else if (int(c5) == 1) {
+          x = vec2(readId.x - c1 * u_Width, 0.0);
+        } else if (int(c5) == 2) {
+          x = vec2(0.0, readId.y - c2 * u_Height);
+        } else {
+          x = vec2(0.0, 0.0);
+        }
         float v = c3 * exp(-0.001 * c4 * u_LOD * length(x) * length(x));
+        if (int(c5) == 1 || int(c5) == 2) {
+          v = v / 5.0;
+        }
         o_FragColor = vec4(v, v, 0.0, 1.0);
       }
       break;

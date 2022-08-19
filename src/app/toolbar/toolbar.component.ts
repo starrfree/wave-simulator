@@ -21,72 +21,84 @@ export class ToolbarComponent implements OnInit {
   }
   
   frequency: string = "";
-  setFrequency() {
+  setFrequency(reload: boolean = true) {
     var x = +this.frequency;
     if (!isNaN(x)) {
       if (this.parameters.initialCondition.c4 != x) {
         this.parameters.initialCondition.c4 = x;
-        this.parametersChange.emit(this.parameters)
+        if (reload) {
+          this.parametersChange.emit(this.parameters)
+        }
         this.saveParameter()
       }
     }
   }
 
   duration: string = "";
-  setDuration() {
+  setDuration(reload: boolean = true) {
     var x = +this.duration;
     if (!isNaN(x)) {
       if (this.parameters.initialCondition.c2 != x) {
         this.parameters.initialCondition.c2 = x;
-        this.parametersChange.emit(this.parameters)
+        if (reload) {
+          this.parametersChange.emit(this.parameters)
+        }
         this.saveParameter()
       }
     }
   }
 
   duration2: string = "";
-  setDuration2() {
+  setDuration2(reload: boolean = true) {
     var x = +this.duration2;
     if (!isNaN(x)) {
       if (this.parameters.initialCondition.c5 != x) {
         this.parameters.initialCondition.c5 = x;
-        this.parametersChange.emit(this.parameters)
+        if (reload) {
+          this.parametersChange.emit(this.parameters)
+        }
         this.saveParameter()
       }
     }
   }
 
   amplitude: string = "";
-  setAmplitude() {
+  setAmplitude(reload: boolean = true) {
     var x = +this.amplitude;
     if (!isNaN(x)) {
       if (this.parameters.initialCondition.c3 != x) {
         this.parameters.initialCondition.c3 = x;
-        this.parametersChange.emit(this.parameters)
+        if (reload) {
+          this.parametersChange.emit(this.parameters)
+        }
         this.saveParameter()
       }
     }
   }
 
   x: string = "";
-  setX() {
+  setX(reload: boolean = true) {
     var x = +this.x;
     if (!isNaN(x)) {
       if (this.parameters.initialCondition.c1 != x) {
         this.parameters.initialCondition.c1 = x;
-        this.parametersChange.emit(this.parameters)
+        if (reload) {
+          this.parametersChange.emit(this.parameters)
+        }
         this.saveParameter()
       }
     }
   }
 
   y: string = "";
-  setY() {
+  setY(reload: boolean = true) {
     var x = +this.y;
     if (!isNaN(x)) {
       if (this.parameters.initialCondition.c2 != x) {
         this.parameters.initialCondition.c2 = x;
-        this.parametersChange.emit(this.parameters)
+        if (reload) {
+          this.parametersChange.emit(this.parameters)
+        }
         this.saveParameter()
       }
     }
@@ -127,9 +139,11 @@ export class ToolbarComponent implements OnInit {
           }
           if (parameters.texture.background) {
             this.setBackgroundTexture(parameters.texture.background.src, parameters.texture.background.name, true)
+          } else {
+            this.parametersChange.emit(parameters)
+            this.saveParameter()
           }
         }
-        // this.parametersChange.emit(parameters)
         this.initInitialConditionsParams()
       })
     } else {
@@ -347,7 +361,8 @@ export class ToolbarComponent implements OnInit {
             c1: 0.5,
             c2: 0.5,
             c3: 10,
-            c4: 1
+            c4: 1,
+            c5: 0
           }
           this.parametersChange.emit(this.parameters)
           break;

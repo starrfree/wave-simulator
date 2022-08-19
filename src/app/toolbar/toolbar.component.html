@@ -37,13 +37,54 @@
             <a href="assets/images/exemples/Background Exemple.png" download mat-menu-item>Download Exemple</a>
           </mat-menu>
           <mat-menu #templateBackground="matMenu">
-            <button mat-menu-item (click)="resetBackground()">Lens <span style="color: #aaa">(default)</span></button>
-            <button mat-menu-item (click)="setBackgroundTexture('assets/images/backgrounds/double slit.png', 'Double Slit')">Double Slit</button>
-            <button mat-menu-item (click)="setBackgroundTexture('assets/images/backgrounds/parabolla.png', 'Parabolla')">Parabolla</button>
-            <button mat-menu-item (click)="setBackgroundTexture('assets/images/backgrounds/ellipse.png', 'Ellipse')">Ellipse</button>
-            <button mat-menu-item (click)="setBackgroundTexture('assets/images/backgrounds/circle.png', 'Circle')">Circle</button>
-            <button mat-menu-item (click)="setBackgroundTexture('assets/images/backgrounds/disk cloud.png', 'Disks')">Disks</button>
-            <button mat-menu-item (click)="setBackgroundTexture('assets/images/backgrounds/fresnel lens.png', 'Fresnel Lens')">Fresnel Lens</button>
+            <button mat-menu-item (click)="resetBackground()">
+              <div class="subnail-continer">
+                <img src="assets/images/lens.png" class="subnail-image">
+              </div>
+              Lens <span style="color: #aaa">(default)</span>
+            </button>
+            <button mat-menu-item (click)="setBackgroundTexture('assets/images/backgrounds/empty.png', 'Empty')">
+              <div class="subnail-continer">
+                <img src="assets/images/backgrounds/empty.png" class="subnail-image">
+              </div>
+              Empty
+            </button>
+            <button mat-menu-item (click)="setBackgroundTexture('assets/images/backgrounds/double slit.png', 'Double Slit')">
+              <div class="subnail-continer">
+                <img src="assets/images/backgrounds/double slit.png" class="subnail-image">
+              </div>
+              Double Slit
+            </button>
+            <button mat-menu-item (click)="setBackgroundTexture('assets/images/backgrounds/parabolla.png', 'Parabolla')">
+              <div class="subnail-continer">
+                <img src="assets/images/backgrounds/parabolla.png" class="subnail-image">
+              </div>
+              Parabolla
+            </button>
+            <button mat-menu-item (click)="setBackgroundTexture('assets/images/backgrounds/circle.png', 'Circle')">
+              <div class="subnail-continer">
+                <img src="assets/images/backgrounds/circle.png" class="subnail-image">
+              </div>
+              Circle
+            </button>
+            <button mat-menu-item (click)="setBackgroundTexture('assets/images/backgrounds/ellipse.png', 'Ellipse')">
+              <div class="subnail-continer">
+                <img src="assets/images/backgrounds/ellipse.png" class="subnail-image">
+              </div>
+              Ellipse
+            </button>
+            <button mat-menu-item (click)="setBackgroundTexture('assets/images/backgrounds/disk cloud.png', 'Disks')">
+              <div class="subnail-continer">
+                <img src="assets/images/backgrounds/disk cloud.png" class="subnail-image">
+              </div>
+              Disks
+            </button>
+            <button mat-menu-item (click)="setBackgroundTexture('assets/images/backgrounds/fresnel lens.png', 'Fresnel Lens')">
+              <div class="subnail-continer">
+                <img src="assets/images/backgrounds/fresnel lens.png" class="subnail-image">
+              </div>
+              Fresnel Lens
+            </button>
           </mat-menu>
         </div>
         <input hidden #gradientInput type="file" accept="image/*" (change)="selectGradient(gradientInput)">
@@ -61,12 +102,12 @@
             <a href="assets/images/exemples/Gradient Exemple.png" download mat-menu-item>Download Exemple</a>
           </mat-menu>
           <mat-menu #templateGradient="matMenu">
-            <button mat-menu-item (click)="resetGradient()">Blue White Red <span style="color: #aaa">(default)</span></button>
-            <button mat-menu-item (click)="setGradientTexture('assets/images/gradients/grayscale.png', 'Gray Scale')">Gray Scale</button>
-            <button mat-menu-item (click)="setGradientTexture('assets/images/gradients/plasma.png', 'Plasma')">Plasma</button>
-            <button mat-menu-item (click)="setGradientTexture('assets/images/gradients/viridis.png', 'Viridis')">Viridis</button>
-            <button mat-menu-item (click)="setGradientTexture('assets/images/gradients/heat.png', 'Heat')">Heat</button>
-            <button mat-menu-item (click)="setGradientTexture('assets/images/gradients/magma.png', 'Magma')">Magma</button>
+            <button mat-menu-item (click)="resetGradient()"><img src="assets/images/grad.png" class="grad-subnail-image">Blue White Red <span style="color: #aaa">(default)</span></button>
+            <button mat-menu-item (click)="setGradientTexture('assets/images/gradients/grayscale.png', 'Gray Scale')"><img src="assets/images/gradients/grayscale.png" class="grad-subnail-image">Gray Scale</button>
+            <button mat-menu-item (click)="setGradientTexture('assets/images/gradients/plasma.png', 'Plasma')"><img src="assets/images/gradients/plasma.png" class="grad-subnail-image">Plasma</button>
+            <button mat-menu-item (click)="setGradientTexture('assets/images/gradients/viridis.png', 'Viridis')"><img src="assets/images/gradients/viridis.png" class="grad-subnail-image">Viridis</button>
+            <button mat-menu-item (click)="setGradientTexture('assets/images/gradients/heat.png', 'Heat')"><img src="assets/images/gradients/heat.png" class="grad-subnail-image">Heat</button>
+            <button mat-menu-item (click)="setGradientTexture('assets/images/gradients/magma.png', 'Magma')"><img src="assets/images/gradients/magma.png" class="grad-subnail-image">Magma</button>
           </mat-menu>
         </div>
       </div>
@@ -183,12 +224,23 @@
     
     <!-- Pulse -->
     <div class="parameters-container" *ngIf="parameters.initialCondition.type == 1">
+      <div class="radio-label field-container">Shape</div>
+      <div class="field-container radio-container">
+        <input type="radio" id="C5Choice1" name="c5" [value]="0" [(ngModel)]="parameters.initialCondition.c5" (change)="parametersChange.emit(parameters); saveParameter()">
+        <label for="C5Choice1" class="before-label">Circular</label>
+
+        <input type="radio" id="C5Choice2" name="c5" [value]="1" [(ngModel)]="parameters.initialCondition.c5" (change)="parametersChange.emit(parameters); saveParameter()">
+        <label for="C5Choice2" class="before-label">Vertical</label>
+    
+        <input type="radio" id="C5Choice3" name="c5" [value]="2" [(ngModel)]="parameters.initialCondition.c5" (change)="parametersChange.emit(parameters); saveParameter()">
+        <label for="C5Choice3" class="before-label">Horizontal</label>
+      </div>
       <div class="text-field-label xy-label">Position</div>
-      <div class="labeled-field-container">
+      <div class="labeled-field-container" *ngIf="parameters.initialCondition.c5 == 0 || parameters.initialCondition.c5 == 1">
         <span class="before-label">x</span>
         <input type="text" class="text-field labeled-field" [(ngModel)]="x" (focusout)="setX()" (keydown.enter)="blur()">
       </div>
-      <div class="labeled-field-container">
+      <div class="labeled-field-container" *ngIf="parameters.initialCondition.c5 == 0 || parameters.initialCondition.c5 == 2">
         <span class="before-label">y</span>
         <input type="text" class="text-field labeled-field" [(ngModel)]="y" (focusout)="setY()" (keydown.enter)="blur()">
       </div>
@@ -242,16 +294,16 @@
       </div>
       <div class="field-container">
         <div class="text-field-label">Amplitude</div>
-        <input type="text" class="text-field" [(ngModel)]="amplitude" (focusout)="setAmplitude()" (keydown.enter)="blur()">
+        <input type="text" class="text-field" [(ngModel)]="amplitude" (focusout)="setAmplitude(false)" (keydown.enter)="blur()">
       </div>
       <div class="field-container">
         <div class="text-field-label">Frequency</div>
-        <input type="text" class="text-field" [(ngModel)]="frequency" (focusout)="setFrequency()" (keydown.enter)="blur()">
+        <input type="text" class="text-field" [(ngModel)]="frequency" (focusout)="setFrequency(false)" (keydown.enter)="blur()">
       </div>
     </div>
   </div>
   <div class="divider field-divider"></div>
   <button mat-button aria-label="reset parameters" class="reset-parameters-button" (click)="resetParameter()">
-    reset parameters to default
+    Reset parameters to default
   </button>
 </div>

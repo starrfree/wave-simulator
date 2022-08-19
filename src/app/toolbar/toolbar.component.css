@@ -6,10 +6,11 @@
 .reset-parameters-button {
   font-size: 12px;
   font-weight: 300;
-  /* margin-left: 10px; */
+  margin-left: 10px;
+  margin-top: 10px;
   /* position: relative; */
   /* left: 50px; */
-  /* background-color: #333; */
+  background-color: #333;
 }
 
 .reset-menu-parameters {
@@ -155,6 +156,11 @@ input[type="checkbox"] {
   margin-bottom: 8px;
 }
 
+input[type="checkbox"]:hover {
+  transform: scale(1.1);
+  transition: 180ms transform ease-in-out;
+}
+
 input[type="checkbox"]::before {
   content: "";
   width: 0.65em;
@@ -192,6 +198,11 @@ input[type="radio"] {
   border-radius: 50%;
   display: grid;
   place-content: center;
+}
+
+input[type="radio"]:hover {
+  transform: scale(1.15);
+  transition: 180ms transform ease-in-out;
 }
 
 input[type="radio"]::before {
@@ -310,4 +321,27 @@ input[type="radio"]:checked::before {
 
 .space-above {
   margin-top: 10px;
+}
+
+.subnail-image {
+  max-width: 40px;
+  max-height: 30px;
+  margin-right: 10px;
+  transform: translate(0, 20%);
+  border: 1px solid gray;
+  border-radius: 3px;
+}
+
+.grad-subnail-image {
+  width: 25px;
+  height: 30px;
+  margin-right: 10px;
+  transform: translate(0, 30%);
+  border-radius: 3px;
+}
+
+.subnail-continer {
+  width: 50px;
+  display: inline-flex;
+
 }
