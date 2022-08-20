@@ -355,13 +355,21 @@ export class SceneCanvasComponent implements OnInit {
       if (this.parameters.texture && this.parameters.texture.background) {
         backgroundTexture = this.parameters.texture.background.texture
       }
-      gl.bindTexture(gl.TEXTURE_2D, backgroundTexture);
+      if (backgroundTexture) {
+        if (Object.getPrototypeOf(backgroundTexture) == WebGLTexture.prototype) {
+          gl.bindTexture(gl.TEXTURE_2D, backgroundTexture);
+        }
+      }
       gl.activeTexture(gl.TEXTURE2);
       var gradientTexture = this.textures.gradient
       if (this.parameters.texture && this.parameters.texture.gradient) {
         gradientTexture = this.parameters.texture.gradient.texture
       }
-      gl.bindTexture(gl.TEXTURE_2D, gradientTexture);
+      if (gradientTexture) {
+        if (Object.getPrototypeOf(gradientTexture) == WebGLTexture.prototype) {
+          gl.bindTexture(gl.TEXTURE_2D, gradientTexture);
+        }
+      }
       gl.drawArrays(gl.TRIANGLE_STRIP, 0, 4)
 
       this.textureOffset += 1

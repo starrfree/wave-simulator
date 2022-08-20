@@ -11,6 +11,8 @@ import { MatSliderModule } from '@angular/material/slider';
 import { AppComponent } from './app.component';
 import { SceneCanvasComponent } from './scene-canvas/scene-canvas.component';
 import { ToolbarComponent } from './toolbar/toolbar.component';
+import { ServiceWorkerModule } from '@angular/service-worker';
+import { environment } from '../environments/environment';
 
 @NgModule({
   declarations: [
@@ -26,7 +28,13 @@ import { ToolbarComponent } from './toolbar/toolbar.component';
     MatIconModule,
     FormsModule,
     MatMenuModule,
-    MatSliderModule
+    MatSliderModule,
+    ServiceWorkerModule.register('ngsw-worker.js', {
+      enabled: environment.production,
+      // Register the ServiceWorker as soon as the application is stable
+      // or after 10 seconds (whichever comes first).
+      registrationStrategy: 'registerWhenStable:10000'
+    })
   ],
   providers: [],
   bootstrap: [AppComponent]

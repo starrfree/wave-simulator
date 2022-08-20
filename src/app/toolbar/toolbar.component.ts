@@ -143,6 +143,9 @@ export class ToolbarComponent implements OnInit {
             this.parametersChange.emit(parameters)
             this.saveParameter()
           }
+        } else {
+          this.parametersChange.emit(parameters)
+          this.saveParameter()
         }
         this.initInitialConditionsParams()
       })
