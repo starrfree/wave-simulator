@@ -1,9 +1,8 @@
 {
-  "name": "wave-simulation",
-  "short_name": "wave-simulation",
-  "theme_color": "#1976d2",
+  "name": "Wave Simulator",
+  "theme_color": "#222222",
   "background_color": "#fafafa",
-  "display": "standalone",
+  "display": "minimal-ui",
   "scope": "./",
   "start_url": "./",
   "icons": [
