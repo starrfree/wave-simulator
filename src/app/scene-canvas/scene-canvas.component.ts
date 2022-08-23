@@ -21,6 +21,7 @@ export class SceneCanvasComponent implements OnInit {
     active: false,
     position: [0, 0]
   }
+  lastSize: any = null
 
   get gradientSrc(): string {
     if (this.parameters.texture && this.parameters.texture.gradient) {
@@ -49,8 +50,9 @@ export class SceneCanvasComponent implements OnInit {
   }
 
   constructor(private shaderService: ShaderService) { 
-    shaderService.onInit.subscribe((val) => {
+    shaderService.onInit.push(() => {
       if (this.didInit) {
+        console.log("constructor")
         this.main()
       }
     })
@@ -58,9 +60,10 @@ export class SceneCanvasComponent implements OnInit {
 
   ngOnInit(): void {
   }
-
+  
   ngAfterViewInit(): void {
     if (this.shaderService.didInit && !this.didInit) {
+      console.log("ngAfterViewInit")
       this.main()
     }
     this.didInit = true
@@ -142,31 +145,6 @@ export class SceneCanvasComponent implements OnInit {
       }
     }
 
-    this.step = 0
-    var renders = 0
-    var render = (time: number) => {
-      if (this.reset) {
-        this.reset = false
-        this.main()
-      } else {
-        if ((!this.parameters.pause && renders % this.parameters.speedDivider == 0) || this.parameters.nextFrame > 0) {
-          // var n = 3
-          // if (this.parameters.LOD == 2) {
-          //   n = 2
-          // } else if (this.parameters.LOD > 2) {
-          //   n = 1
-          // }
-          this.drawScene(gl, programInfo, 3); // * this.parameters.speedMultiplier
-          if (this.parameters.nextFrame > 0) {
-            this.parameters.nextFrame--
-          }
-        }
-        requestAnimationFrame(render);
-      }
-      renders++
-    }
-    requestAnimationFrame(render)
-
     const resizeCanvas = () => {
       var ratio: number = this.canvas.nativeElement.clientWidth / this.canvas.nativeElement.clientHeight
       if (this.parameters.texture && this.parameters.texture.background) {
@@ -193,8 +171,43 @@ export class SceneCanvasComponent implements OnInit {
       this.parameters.pause = false
       this.drawScene(gl, programInfo)
     }
-    window.removeEventListener('resize', () => {})
-    window.addEventListener('resize', resizeCanvas, false)
+
+    this.step = 0
+    var renders = 0
+    var render = (time: number) => {
+      if (this.reset) {
+        this.reset = false
+        this.main()
+      } else {
+        if ((!this.parameters.pause && renders % this.parameters.speedDivider == 0) || this.parameters.nextFrame > 0) {
+          // var n = 3
+          // if (this.parameters.LOD == 2) {
+          //   n = 2
+          // } else if (this.parameters.LOD > 2) {
+          //   n = 1
+          // }
+          this.drawScene(gl, programInfo, 3); // * this.parameters.speedMultiplier
+          if (this.parameters.nextFrame > 0) {
+            this.parameters.nextFrame--
+          }
+        }
+        requestAnimationFrame(render);
+      }
+      renders++
+      if (this.lastSize) {
+        if (this.canvas.nativeElement.clientWidth != this.lastSize.width || this.canvas.nativeElement.clientHeight != this.lastSize.height) {
+          resizeCanvas()
+        }
+      }
+      this.lastSize = {
+        width: this.canvas.nativeElement.clientWidth,
+        height: this.canvas.nativeElement.clientHeight
+      }
+    }
+    requestAnimationFrame(render)
+
+    // window.removeEventListener('resize', () => {})
+    // window.addEventListener('resize', resizeCanvas, false)
     resizeCanvas()
   }
 
@@ -213,6 +226,11 @@ export class SceneCanvasComponent implements OnInit {
   }
 
   initTextures(gl: WebGL2RenderingContext, width: number, height: number) {
+    if (gl && Object.getPrototypeOf(gl) == WebGL2RenderingContext.prototype) {
+    } else {
+      return
+    }
+
     var textures = []
     var frameBuffers = []
     for (let i = 0; i < 2; i++) {

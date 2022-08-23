@@ -2,6 +2,8 @@ export {};
 
 declare global {
   interface SimulationParameters {
+    discriminator: 'SimulationParametersDiscriminator',
+     
     pause: boolean,
     nextFrame: number,
     forceAspectRatio: boolean,

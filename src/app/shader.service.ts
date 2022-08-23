@@ -13,29 +13,29 @@ export class ShaderService {
   gl!: WebGL2RenderingContext
 
   didInit = false
-  onInit: Observable<any>
+  onInit: any[] = []
 
   constructor(private http: HttpClient) {
-    this.onInit =  new Observable((observer) => {
-      this.http.get("shaders/compute-vertex.glsl", {responseType: 'text'})
-        .subscribe(res => {
-          this.computeVertexSource = res
-          this.http.get("shaders/render-vertex.glsl", {responseType: 'text'})
+    this.http.get("shaders/compute-vertex.glsl", {responseType: 'text'})
+      .subscribe(res => {
+        this.computeVertexSource = res
+        this.http.get("shaders/render-vertex.glsl", {responseType: 'text'})
+          .subscribe(res => {
+            this.renderVertexSource = res
+            this.http.get("shaders/render-fragment.glsl", {responseType: 'text'})
             .subscribe(res => {
-              this.renderVertexSource = res
-              this.http.get("shaders/render-fragment.glsl", {responseType: 'text'})
-              .subscribe(res => {
-                this.renderFragmentSource = res
-                this.http.get("shaders/compute-fragment.glsl", {responseType: 'text'})
-                  .subscribe(res => {
-                    this.computeFragmentSource = res
-                    this.didInit = true
-                    observer.next(true)
-                  })
-              })
+              this.renderFragmentSource = res
+              this.http.get("shaders/compute-fragment.glsl", {responseType: 'text'})
+                .subscribe(res => {
+                  this.computeFragmentSource = res
+                  this.didInit = true
+                  this.onInit.forEach(element => {
+                    element()
+                  });
+                })
             })
-        })
-    })
+          })
+      })
   }
 
   public initShaderProgram(gl: any, vsSource: string, fsSource: string, transform_feedback_varyings: string[] | null = null): any {
@@ -79,6 +79,11 @@ export class ShaderService {
   }
 
   imageToTexture(gl: WebGL2RenderingContext, src: string, onLoad: (texture: WebGLTexture, width: number, height: number) => void) {
+    if (gl && Object.getPrototypeOf(gl) == WebGL2RenderingContext.prototype) {
+    } else {
+      return
+    }
+
     const texture = gl.createTexture();
     gl.bindTexture(gl.TEXTURE_2D, texture);
 

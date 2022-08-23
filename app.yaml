@@ -1,0 +1,20 @@
+runtime: nodejs16
+service: wavesimulator
+
+handlers:
+  - url: /
+    secure: always
+    static_files: dist/wave-simulation/index.html
+    upload: dist/wave-simulation/index.html
+
+  #  Routing rules for resources, css, js, images etc. Any file with format filename.ext
+  - url: /(.*\.(.+))$
+    secure: always
+    static_files: dist/wave-simulation/\1
+    upload: dist/wave-simulation/(.*\.(.+))$
+
+  #  Routing rule for Angular Routing
+  - url: /(.*)
+    secure: always
+    static_files: dist/wave-simulation/index.html
+    upload: dist/wave-simulation/index.html

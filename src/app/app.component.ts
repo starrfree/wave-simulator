@@ -10,11 +10,12 @@ export class AppComponent {
   @ViewChild(SceneCanvasComponent) sceneComponent!: SceneCanvasComponent;
   fullScreen: boolean = false
   defaultParameters: SimulationParameters = {
+    discriminator: 'SimulationParametersDiscriminator',
     pause: false,
     nextFrame: 0,
     forceAspectRatio: true,
     showGradient: true,
-    LOD: 1,
+    LOD: 2,
     energy: false,
     boundary: 0,
     initialCondition: {

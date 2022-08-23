@@ -107,9 +107,10 @@ export class ToolbarComponent implements OnInit {
   constructor(private shaderService: ShaderService) { }
 
   ngOnInit(): void {
-    // localStorage.removeItem("parameters")
-    this.loadParameter()
-
+    this.shaderService.onInit.push(() => {
+      this.loadParameter()
+    })
+    // this.loadParameter()
   }
 
   saveParameter() {
@@ -125,30 +126,28 @@ export class ToolbarComponent implements OnInit {
   loadParameter() {
     const params = localStorage.getItem("parameters")
     if (params) {
-      this.shaderService.onInit.subscribe(() => {
-        const parameters: SimulationParameters = JSON.parse(params) // `{"pause":"false","nextFrame":0,"forceAspectRatio":true,"showGradient":true,"LOD":1,"energy":false,"boundary":0,"initialCondition":{"type":0,"c1":0,"c2":800,"c3":0.7,"c4":0.05},"aCeil":1,"speedMultiplier":1}`
-        // parameters.test = {
-        //   string: "string",
-        //   number: 123.4,
-        //   boolean: true
-        // }
-        this.parameters = parameters
-        if (parameters.texture) {
-          if (parameters.texture.gradient) {
-            this.setGradientTexture(parameters.texture.gradient.src, parameters.texture.gradient.name)
-          }
-          if (parameters.texture.background) {
-            this.setBackgroundTexture(parameters.texture.background.src, parameters.texture.background.name, true)
-          } else {
-            this.parametersChange.emit(parameters)
-            this.saveParameter()
-          }
+      console.log("loadParameter")
+      const parameters: SimulationParameters = JSON.parse(params) // `{"pause":"false","nextFrame":0,"forceAspectRatio":true,"showGradient":true,"LOD":1,"energy":false,"boundary":0,"initialCondition":{"type":0,"c1":0,"c2":800,"c3":0.7,"c4":0.05},"aCeil":1,"speedMultiplier":1}`
+      if (!(parameters.discriminator === 'SimulationParametersDiscriminator')) {
+        this.initInitialConditionsParams()
+        return
+      }
+      this.parameters = parameters
+      if (parameters.texture) {
+        if (parameters.texture.gradient) {
+          this.setGradientTexture(parameters.texture.gradient.src, parameters.texture.gradient.name)
+        }
+        if (parameters.texture.background) {
+          this.setBackgroundTexture(parameters.texture.background.src, parameters.texture.background.name, true)
         } else {
           this.parametersChange.emit(parameters)
           this.saveParameter()
         }
-        this.initInitialConditionsParams()
-      })
+      } else {
+        this.parametersChange.emit(parameters)
+        this.saveParameter()
+      }
+      this.initInitialConditionsParams()
     } else {
       this.initInitialConditionsParams()
     }
