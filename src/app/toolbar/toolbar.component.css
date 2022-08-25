@@ -8,6 +8,7 @@
   font-weight: 300;
   margin-left: 10px;
   margin-top: 10px;
+  margin-bottom: 20px;
   /* position: relative; */
   /* left: 50px; */
   background-color: #333;
@@ -344,4 +345,17 @@ input[type="radio"]:checked::before {
   width: 50px;
   display: inline-flex;
 
+}
+
+.github {
+  margin-top: 20px;
+  margin-left: 10px;
+}
+
+.github a {
+  color: inherit;
+}
+
+.github a:hover {
+  font-weight: 700;
 }

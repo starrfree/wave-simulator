@@ -1,6 +1,6 @@
 # Wave Simulator
 
-[Wave Simulator](https://wavesimulator.starfree.app) is a web app that allows you to simulate 2D waves in your browser.
+[Wave Simulator](https://wavesimulator.starfree.app) is a web app that allows to simulate 2D waves in your browser.
 <br>Simply choose a background image, a color gradient and tweak the different parameters, then start the simulation and let the app simulate the wave.
 
 https://user-images.githubusercontent.com/98308569/186477567-ce8e010d-3b65-49e4-96be-27e33a91a427.mp4
