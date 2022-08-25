@@ -157,8 +157,8 @@
         <label for="forceAspectRatio" class="after-label">Show gradient legend</label>
       </div>
     </div>
-    <div class="radio-label field-container">Level of detail</div>
-    <div class="field-container radio-container">
+    <div class="radio-label field-container" *ngIf="deviceService.isDesktop()">Level of detail</div>
+    <div class="field-container radio-container" *ngIf="deviceService.isDesktop()">
       <input type="radio" id="LODChoice1" name="LOD" [value]="1" [(ngModel)]="parameters.LOD" (change)="parametersChange.emit(parameters); saveParameter()">
       <label for="LODChoice1" class="before-label">High</label>
 

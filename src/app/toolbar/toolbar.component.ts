@@ -1,5 +1,6 @@
 import { Component, EventEmitter, HostListener, Input, OnInit, Output } from '@angular/core';
 import { ShaderService } from '../shader.service';
+import { DeviceDetectorService } from 'ngx-device-detector';
 
 @Component({
   selector: 'app-toolbar',
@@ -104,7 +105,7 @@ export class ToolbarComponent implements OnInit {
     }
   }
 
-  constructor(private shaderService: ShaderService) { }
+  constructor(private shaderService: ShaderService, public deviceService: DeviceDetectorService) { }
 
   ngOnInit(): void {
     this.shaderService.onInit.push(() => {
@@ -131,6 +132,9 @@ export class ToolbarComponent implements OnInit {
       if (!(parameters.discriminator === 'SimulationParametersDiscriminator')) {
         this.initInitialConditionsParams()
         return
+      }
+      if (this.deviceService.isMobile()) {
+        parameters.LOD = 3
       }
       this.parameters = parameters
       if (parameters.texture) {

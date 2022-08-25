@@ -1,4 +1,5 @@
 import { Component, ViewChild } from '@angular/core';
+import { DeviceDetectorService } from 'ngx-device-detector';
 import { SceneCanvasComponent } from './scene-canvas/scene-canvas.component';
 
 @Component({
@@ -30,6 +31,12 @@ export class AppComponent {
     speedDivider: 1
   }
   parameters = this.defaultParameters
+
+  constructor(private deviceService: DeviceDetectorService) {
+    if (deviceService.isMobile()) {
+      this.defaultParameters.LOD = 3
+    }
+  }
 
   toggleFullScreen(): void {
     this.fullScreen = !this.fullScreen
